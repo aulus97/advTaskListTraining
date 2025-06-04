@@ -3,13 +3,12 @@ import { TasksCollection } from "../imports/api/TasksCollection";
 import "../imports/api/TasksMethods";
 import "../imports/api/TasksPublications";
 
-const insertTask = (taskText, user) =>
-  TasksCollection.insertAsync({
+const insertTask = (taskText, user) => TasksCollection.insertAsync({
     text: taskText,
     userId: user._id,
     createdAt: new Date(),
-  });
-
+});
+/*
 const SEED_USERNAME = "meteorite";
 const SEED_PASSWORD = "password";
 
@@ -34,3 +33,4 @@ Meteor.startup(async () => {
     ].forEach((taskText) => insertTask(taskText, user));
   }
 });
+*/

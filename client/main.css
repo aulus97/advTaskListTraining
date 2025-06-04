@@ -30,7 +30,7 @@ button:focus {
   outline: 0;
 }
 
-.app {
+.tasksPage {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -41,6 +41,13 @@ button:focus {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+]
+.app-nav-links {
+  /*flex-grow: 1;*/
+  white-space: nowrap;
+  /*overflow: hidden;
+  text-overflow: ellipsis;*/
 }
 
 .main {
@@ -172,6 +179,7 @@ header {
 .login-form > div > button {
   background-color: #62807e;
 }
+
 .user {
   display: flex;
 
@@ -180,4 +188,10 @@ header {
   margin: 8px 16px 0;
   font-weight: bold;
   cursor: pointer;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

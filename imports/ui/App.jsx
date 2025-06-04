@@ -1,95 +1,53 @@
-import React, { Fragment, useState } from "react";
-import { useTracker, useSubscribe } from "meteor/react-meteor-data";
-import { TasksCollection } from "/imports/api/TasksCollection";
-import { Task } from "./Task";
-import { TaskForm } from "./TaskForm";
+import React from "react";
+import { TasksPage } from "./TasksPage";
+import { Welcome } from "./Welcome";
+import { SignInForm } from "./SignInForm";
+//import {  BrowserRouter, Route, Routes/*,Outlet, Link*/ } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import { Hello } from "./Hello";
+import { Info } from "./Info";
 import { LoginForm } from "./LoginForm";
 
-import { Outlet, Link } from "react-router-dom";
-
 export const App = () => {
-  const [hideCompleted, setHideCompleted] = useState(false);
-
-  const user = useTracker(() => Meteor.user());
-
-  const isLoading = useSubscribe("tasks");
-
-  const hideCompletedFilter = { isChecked: { $ne: true } };
-
-  const tasks = useTracker(() => {
-    if (!user) {
-      return [];
-    }
-    return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {
-      sort: { createdAt: -1 },
-    }).fetch();
-  });
-
-  const pendingTasksCount = useTracker(() => {
-    if (!user) {
-      return 0;
-    }
-    return TasksCollection.find(hideCompletedFilter).count();
-  });
-
-  const pendingTasksTitle = `${
-    pendingTasksCount ? ` (${pendingTasksCount})` : ""
-  }`;
-
-  const handleToggleChecked = ({ _id, isChecked }) =>
-    Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
-
-  const handleDelete = ({ _id }) => Meteor.callAsync("tasks.delete", { _id });
-
-  const logout = () => Meteor.logout();
-
-  if (isLoading()) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div className="app">
-      <div>
-        <nav>
-          <Link to="/hello">Hello</Link> | 
-          <Link to="/info">Info</Link>
-        </nav>
-        <hr />
-        <Outlet />
-      </div>
-      <header>
-        <div className="app-bar">
-          <div className="app-header">
-            <h1>️📝️ To Do List {pendingTasksTitle}</h1>
-          </div>
-        </div>
-      </header>
-      <div className="main">
-        {user ? (
-          <Fragment>
-            <div className="user" onClick={logout}>
-              {user.username} 🚪
-            </div>
-            <TaskForm />
-            <div className="filter">
-              <button onClick={() => setHideCompleted(!hideCompleted)}>
-                {hideCompleted ? "Show All" : "Hide Completed"}
-              </button>
-            </div>
-            <ul className="tasks">
-              {tasks.map((task) => (
-                <Task
-                  key={task._id}
-                  task={task}
-                  onCheckboxClick={handleToggleChecked}
-                  onDeleteClick={handleDelete}
-                />
-              ))}
-            </ul>
-          </Fragment>
-        ) : (
-          <LoginForm />
-        )}
-      </div>
-    </div>
+  
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Welcome />,
+    },
+    {
+      path: '/signIn',
+      element: <SignInForm />,
+    },
+    {
+      path: '/logIn',
+      element: <LoginForm />,
+    },
+    {
+      path: '/tasks',
+      element: <TasksPage />, // acts as a layout or wrapper
+    },
+    {  
+      path: '/hello',
+      element: <Hello />,
+    },
+    {
+      path: '/info',
+      element: <Info />,
+    },
+  ]);
+  
+  return (/*
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/tasks" element={<TasksPage />}>
+          <Route index element={<Hello />} />
+          <Route path="/info" element={<Info />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    */
+    router
   );
 };
