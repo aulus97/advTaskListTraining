@@ -1,35 +1,24 @@
 import { Meteor } from "meteor/meteor";
 import React, { useState } from "react";
-import { Outlet, Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const submit = (e) => {
     e.preventDefault();
     
-    Meteor.loginWithPassword(username, password);
-    if(Error)
-      return (
-        <div>
-          <p>Login error!</p>
-          <button >
-            <nav>
-              <Link to="/logIn">Try to log in again</Link>
-            </nav>
-          </button>
-          <hr />
-          <button >
-            <nav>
-              <Link to="/signIn">Sign in, instead</Link>
-            </nav>
-          </button>
-        </div>
-      );
-    return (<Navigate to="/tasks" />);
+    Meteor.loginWithPassword(username, password, (err) => {
+      if (err) {
+        setError(err.reason || "Login failed");
+      } else {
+        navigate("/tasks");
+      }
+    });
   };
-
   return (
     <div className="login-wrapper">
       <h1>Please Log In</h1>
@@ -62,7 +51,7 @@ export const LoginForm = () => {
           <button >
             Don't have an account?
             <nav>
-              <Link to="/signIn">Sign In</Link>
+              <Link to="/signUp">Sign up</Link>
             </nav>
           </button>
         </div>

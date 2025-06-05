@@ -1,11 +1,47 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "/imports/ui/App";
-import { RouterProvider } from "react-router-dom";
-//import "../imports/api/TasksMethods";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { TasksPage } from "/imports/ui/TasksPage";
+import { Welcome } from "/imports/ui/Welcome";
+import { SignUpForm } from "/imports/ui/SignUpForm";
+import { Hello } from "/imports/ui/Hello";
+import { Info } from "/imports/ui/Info";
+import { LoginForm } from "/imports/ui/LoginForm";
 
-ReactDOM.createRoot(document.getElementById('react-target')).render(
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Welcome />,
+  },
+  {
+    path: 
+    '/signUp',
+    element: <SignUpForm />,
+  },
+  {
+    path: 
+    '/logIn',
+    element: <LoginForm />,
+  },
+  {
+    path: 
+    '/tasks',
+    element: <TasksPage />, // acts as a layout or wrapper
+  },
+  {  
+    path: 
+    '/hello',
+    element: <Hello />,
+  },
+  {
+    path: 
+    '/info',
+    element: <Info />,
+  },
+]);
+
+ReactDOM.createRoot(document.getElementById("react-target")).render(
   <React.StrictMode>
-    <RouterProvider router={App()} />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

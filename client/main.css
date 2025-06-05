@@ -42,7 +42,7 @@ button:focus {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-]
+
 .app-nav-links {
   /*flex-grow: 1;*/
   white-space: nowrap;
