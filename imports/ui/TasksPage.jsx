@@ -6,6 +6,21 @@ import { TaskForm } from "./TaskForm";
 //import { LoginForm } from "./LoginForm";
 import { Outlet, Link, Navigate  } from "react-router-dom";
 
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
 export const TasksPage = () => {
     const [hideCompleted, setHideCompleted] = useState(false);
     const user = useTracker(() => Meteor.user());
@@ -53,9 +68,9 @@ export const TasksPage = () => {
             </div>
             <TaskForm />
             <div className="filter">
-                <button onClick={() => setHideCompleted(!hideCompleted)}>
+                <Button variant="outlined" onClick={() => setHideCompleted(!hideCompleted)}>
                 {hideCompleted ? "Show All" : "Hide Completed"}
-                </button>
+                </Button>
             </div>
             <ul className="tasks">
                 {tasks.map((task) => (
