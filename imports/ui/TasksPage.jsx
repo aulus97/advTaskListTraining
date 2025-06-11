@@ -3,22 +3,10 @@ import { useTracker, useSubscribe } from "meteor/react-meteor-data";
 import { TasksCollection } from "/imports/api/TasksCollection";
 import { Task } from "./Task";
 import { TaskForm } from "./TaskForm";
+import { ResponsiveTopBar } from "./TopBar";
 //import { LoginForm } from "./LoginForm";
-import { Outlet, Link, Navigate  } from "react-router-dom";
+import { Navigate  } from "react-router-dom";
 
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 export const TasksPage = () => {
@@ -33,61 +21,57 @@ export const TasksPage = () => {
         }).fetch();
     });
 
-    const pendingTasksCount = useTracker(() => {
+    /*const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
     });
 
     const pendingTasksTitle = `${
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
-    }`;
+    }`;*/
 
     const handleToggleChecked = ({ _id, isChecked }) =>
     Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
 
     const handleDelete = ({ _id }) => Meteor.callAsync("tasks.delete", { _id });
-    const logout = () => Meteor.logout();
 
     if (isLoading()) {
-        return <div>Loading...</div>;
+        return (
+            <Button
+            loading
+            loadingPosition="end"
+            variant="outlined"
+            >
+                Loading...
+            </Button>
+        );
     }
     return (
-    <div className="tasksPage">
-        <header>
-        <div className="app-bar">
-            <div className="app-header">
-                <h1>️📝️ To Do List {pendingTasksTitle}</h1>
-            </div>
+        <div className="tasksPage">
+            {user ? (
+                <Fragment>
+                    <ResponsiveTopBar />
+                    <TaskForm />
+                    <div className="filter">
+                        <Button variant="outlined" onClick={() => setHideCompleted(!hideCompleted)}>
+                        {hideCompleted ? "Show All" : "Hide Completed"}
+                        </Button>
+                    </div>
+                    <ul className="tasks">
+                        {tasks.map((task) => (
+                        <Task
+                            key={task._id}
+                            task={task}
+                            onCheckboxClick={handleToggleChecked}
+                            onDeleteClick={handleDelete}
+                        />
+                        ))}
+                    </ul>
+                </Fragment>
+            ) : (
+                <Navigate to="/logIn" />
+            )}
         </div>
-        </header>
-        <div className="main">
-        {user ? (
-            <Fragment>
-            <div className="user" onClick={logout}>
-                {user.username} 🚪
-            </div>
-            <TaskForm />
-            <div className="filter">
-                <Button variant="outlined" onClick={() => setHideCompleted(!hideCompleted)}>
-                {hideCompleted ? "Show All" : "Hide Completed"}
-                </Button>
-            </div>
-            <ul className="tasks">
-                {tasks.map((task) => (
-                <Task
-                    key={task._id}
-                    task={task}
-                    onCheckboxClick={handleToggleChecked}
-                    onDeleteClick={handleDelete}
-                />
-                ))}
-            </ul>
-            </Fragment>
-        ) : (
-            <Navigate to="/logIn" />
-        )}
-        </div>
-    </div>
     );
 };
 
@@ -100,4 +84,13 @@ export const TasksPage = () => {
             <hr />
             <Outlet />
             </div>
-*/
+
+
+<header>
+        <div className="app-bar">
+            <div className="app-header">
+                <h1>️📝️ To Do List {pendingTasksTitle}</h1>
+            </div>
+        </div>
+        </header>
+        <div className="main">            */
