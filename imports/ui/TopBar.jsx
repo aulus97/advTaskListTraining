@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { TasksCollection } from "/imports/api/TasksCollection";
+import { useNavigate } from "react-router-dom";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -36,9 +37,10 @@ const settings = ['Logout'];
 }*/
 
 export const ResponsiveTopBar = () => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
     const hideCompletedFilter = { isChecked: { $ne: true } };
+    const navigate = useNavigate();
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -55,19 +57,18 @@ export const ResponsiveTopBar = () => {
         setAnchorElUser(null);
     };
 
-    const handleClickMenuItem = () => {
+    const handleClickMenuItem = (page) => {
         switch(page){
-            case "Welcome":
-                navigate("/");
-                break;
-            case "Hello":
-                navigate("/hello");
-                break;
-            case "Info":
-                navigate("/info");
-                break;
+            case 'Welcome':
+                return (navigate("/"));
+            case 'Hello':
+                return (navigate("/hello"));
+            case 'Info':
+                return (navigate("/info"));
             default:
+                break;
         }
+        //handleCloseUserMenu();
     };
 
     const user = useTracker(() => Meteor.user());
@@ -87,8 +88,7 @@ export const ResponsiveTopBar = () => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
-                        <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <Box sx={{ flexGrow: 1, display: 'block' }}>
                             <IconButton
                                 size="large"
                                 aria-label="account of current user"
@@ -114,25 +114,23 @@ export const ResponsiveTopBar = () => {
                                 }}
                                 open={Boolean(anchorElNav)}
                                 onClose={handleCloseNavMenu}
-                                sx={{ display: { xs: 'block', md: 'none' } }}
+                                sx={{ display: 'block' }}
                             >
                                 {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleClickMenuItem}>
-                                    <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
-                                </MenuItem>
+                                    <MenuItem key={page} onClick={()=>handleClickMenuItem(page)}>
+                                        <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                                    </MenuItem>
                                 ))}
                             </Menu>
-                        </Box>
+                        {/*</Box>
                         {/*<AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />*/}
-                        {/* Logo's text */}
-                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        {/* Logo's text //}
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>*/}
                             <Typography
                             variant="h5"
-                            noWrap
                             component="a"
                             sx={{
                                 mr: 2,
-                                display: { xs: 'flex', md: 'none' },
                                 flexGrow: 1,
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
@@ -144,34 +142,21 @@ export const ResponsiveTopBar = () => {
                                 📝️ To Do List {pendingTasksTitle}
                             </Typography>
                         </Box>
-                        {/* Pages of menu */}
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map((page) => (
-                                <Button
-                                key={page}
-                                onClick={handleClickMenuItem}
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                                >
-                                    {page}
-                                </Button>
-                            ))}
-                        </Box>
                         {/* User menu */}
                         <Box sx={{ flexGrow: 0 }}>
                             {/* User icon */}
                             <Tooltip title={user ? "Open Settings" : "Log In or Sign Up"}>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <AccountCircleIcon></AccountCircleIcon>
+                                    <AccountCircleIcon sx={{color: 'white'}}></AccountCircleIcon>
                                     <Typography 
-                                    noWrap
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     >
-                                        {user ? user.username : ""}
+                                        {user ? (" "+ user.username +" ") : ""}
                                     </Typography>
                                 </IconButton>
                             </Tooltip>
                             {/* menu de logout */}
-                            <Menu
+                            {user ? (<Menu
                                 sx={{ mt: '45px' }}
                                 id="menu-appbar"
                                 anchorEl={anchorElUser}
@@ -192,7 +177,7 @@ export const ResponsiveTopBar = () => {
                                     <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                                 </MenuItem>
                                 ))}
-                            </Menu>
+                            </Menu>) : ("")}
                         </Box>
                     </Toolbar>
                 </Container>

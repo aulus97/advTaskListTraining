@@ -40,7 +40,6 @@ export const TaskForm = () => {
       
       <Button sx={{ my: 2, color: 'white', display: 'block' }}>
         <Typography
-        noWrap
         sx={{ my: 2, color: 'white', display: 'block' }}
         >
           Add Task

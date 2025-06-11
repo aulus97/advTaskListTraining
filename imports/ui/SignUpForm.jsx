@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Accounts } from 'meteor/accounts-base';
 import { ResponsiveTopBar } from "./TopBar";
 
@@ -28,11 +28,12 @@ export const SignUpForm = () => {
         }, (err) => {
             if (err) {
                 setError(err.reason || "Sign up failed");
+                return (navigate("/signUp"));
             } else {
-                navigate("/logIn");
                 setLoading(false);
             }
         });
+        return (navigate("/logIn"));
     };
     return (
         <div className="login-wrapper">
@@ -51,7 +52,8 @@ export const SignUpForm = () => {
                         label="Set an username" 
                         required
                         onChange={(e) => setUsername(e.target.value)}
-                        variant="outlined" 
+                        variant="outlined"
+                        disabled={loading} 
                     />
                     <TextField 
                         fullWidth
@@ -59,18 +61,18 @@ export const SignUpForm = () => {
                         label="Set your password" 
                         required
                         onChange={(e) => setPassword(e.target.value)}
-                        variant="outlined" 
+                        variant="outlined"
+                        disabled={loading} 
                     />
-                    <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+                    <Button sx={{ my: 2, color: 'white', display: 'block' }}
+                    onClick={handleClick}
+                    loading={loading}
+                    loadingPosition="end"
+                    disabled={loading}
+                    >
                         <Typography
-                        sx={{ my: 2, color: 'white', display: 'block' }}
-                        onClick={handleClick}
-                        loading={loading}
-                        noWrap
-                        loadingPosition="end"
-                        variant="contained"
-                        >
-                            Sign up
+                        sx={{ my: 2, color: 'white', display: 'block' }}>
+                            {loading ? "Signing Up..." : "Sign up"}
                         </Typography>
                     </Button>
                 </Box>

@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import React, { Fragment, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -21,23 +21,27 @@ export const LoginForm = () => {
       if (err) {
         setError(err.reason || "Login failed");
       } else {
-        navigate("/tasks");
+        return (navigate("/tasks"));
       }
     });
   };
+
+  const handleSignUpClick = () => {
+    return (navigate("/signUp"));
+  };
+  
   return (
     <div className="login-wrapper">
       <Fragment>
         <ResponsiveTopBar />
         <Box
         component="form"
-        onSubmit={submit}
+        /*onSubmit={submit}*/
         sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
         noValidate
         autoComplete="off"
         >
           <Typography
-          noWrap
           sx={{ my: 2, color: 'white', display: 'block' }}
           >
             Please Log In
@@ -53,29 +57,35 @@ export const LoginForm = () => {
           <TextField 
           /*fullWidth*/
           id="password" 
-          label="Set your password" 
+          label="Password" 
           required
           onChange={(e) => setPassword(e.target.value)}
           variant="outlined" 
           />
-          <Button sx={{ my: 2, color: 'white', display: 'block' }}>
+          <Button sx={{ my: 2, color: 'white', display: 'block' }}
+          onClick={submit}
+          variant="contained">
             <Typography
-            noWrap
             sx={{ my: 2, color: 'white', display: 'block' }}
-            variant="contained"
             >
-            Log In
+              Log In
             </Typography>
           </Button>
           <Divider />
           <Typography
-            noWrap
             sx={{ my: 2, color: 'white', display: 'block' }}
             >
             Don't have an account?
           </Typography>
-          <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-            <Link to="/signUp">Sign up</Link>
+          <Button sx={{ my: 2, color: 'white', display: 'block' }}
+          variant="contained"
+          onClick={handleSignUpClick}
+          >
+            <Typography
+            sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Sign up
+            </Typography>
           </Button>
         </Box>
       </Fragment>

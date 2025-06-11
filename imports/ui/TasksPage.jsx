@@ -21,14 +21,14 @@ export const TasksPage = () => {
         }).fetch();
     });
 
-    /*const pendingTasksCount = useTracker(() => {
+    const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
     });
 
     const pendingTasksTitle = `${
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
-    }`;*/
+    }`;
 
     const handleToggleChecked = ({ _id, isChecked }) =>
     Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
