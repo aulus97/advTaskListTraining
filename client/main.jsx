@@ -1,46 +1,46 @@
 import React from "react";
-import ReactDOM from "react-dom/client";//truly need it???
-//import { createRoot } from "react-dom/client";
-import { Meteor } from "meteor/meteor";
-import { App } from "/imports/ui/App";
-import { Info } from "/imports/ui/Info";
+import ReactDOM from "react-dom/client";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { TasksPage } from "/imports/ui/TasksPage";
+import { Welcome } from "/imports/ui/Welcome";
+import { SignUpForm } from "/imports/ui/SignUpForm";
 import { Hello } from "/imports/ui/Hello";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "../imports/api/TasksMethods";
+import { Info } from "/imports/ui/editTask";
+import { LoginForm } from "/imports/ui/LoginForm";
 
-//Meteor.startup(() => {
-  /*
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/" element={<Root />}>
-        <Route index element={<Hello />} />
-        <Route path="/info" element={<Info />} />
-      </Route>
-    )
-  );
-    
-  */
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <App />, // acts as a layout or wrapper
-      children: [
-        {
-          index: true,
-          path: '/hello',
-          element: <Hello />,
-        },
-        {
-          path: '/info',
-          element: <Info />,
-        },
-      ],
-    },
-  ]);
-  
-//});
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Welcome />,
+  },
+  {
+    path: 
+    '/signUp',
+    element: <SignUpForm />,
+  },
+  {
+    path: 
+    '/logIn',
+    element: <LoginForm />,
+  },
+  {
+    path: 
+    '/tasks',
+    element: <TasksPage />, // acts as a layout or wrapper
+  },
+  {  
+    path: 
+    '/hello',
+    element: <Hello />,
+  },
+  {
+    path: 
+    '/editTask',
+    element: <Info />,
+  },
+]);
 
-ReactDOM.createRoot(document.getElementById('react-target')).render(
+ReactDOM.createRoot(document.getElementById("react-target")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>

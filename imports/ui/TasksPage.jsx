@@ -30,11 +30,15 @@ export const TasksPage = () => {
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
     }`;
 
-    const handleToggleChecked = ({ _id, isChecked }) =>
-    Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
+    const handleToggleChecked = ({ _id, isChecked }) => 
+        Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
 
-    const handleDelete = ({ _id }) => Meteor.callAsync("tasks.delete", { _id });
+    const handleDelete = ({ _id }) => 
+        Meteor.callAsync("tasks.delete", { _id });
 
+    const handleToggleStatus = ({ _id, status }) => 
+        Meteor.callAsync("tasks.toggleStatus", { _id, status });
+    
     if (isLoading()) {
         return (
             <Button
@@ -64,6 +68,7 @@ export const TasksPage = () => {
                             task={task}
                             onCheckboxClick={handleToggleChecked}
                             onDeleteClick={handleDelete}
+                            onStatusClick={handleToggleStatus}
                         />
                         ))}
                     </ul>
