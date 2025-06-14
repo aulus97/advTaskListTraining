@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useTracker, useSubscribe } from "meteor/react-meteor-data";
 import { useNavigate } from "react-router-dom";
+=======
+import React from "react";
+import { useTracker, useSubscribe } from "meteor/react-meteor-data";
+>>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -12,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
+<<<<<<< HEAD
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { Button } from "@mui/material";
 
@@ -47,6 +53,16 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
     <Box sx={{ width: '70%', bgcolor: 'background.paper', margin: '0 auto' }}>
       <List>
         <ListItem sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+=======
+
+export const Task = ({ task, onCheckboxClick, onDeleteClick }) => {
+  const user = useTracker(() => Meteor.user());
+  
+  return (
+    <Box sx={{ width: '70%', bgcolor: 'background.paper', margin: '0 auto' }}>
+      <List>
+        <ListItem disablePadding>
+>>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
           <FormControlLabel
               control={
                 <Checkbox
@@ -57,6 +73,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
               label=""
           />
           <ListItemText
+<<<<<<< HEAD
             primary={
               <>
               {task.title} 
@@ -83,6 +100,13 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
           </IconButton>
           <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
             <DeleteIcon />
+=======
+            primary={task.text}
+            secondary={"by: " + user.username + " | at: " + user.createdAt}
+          />
+          <IconButton edge="end" aria-label="delete">
+            <DeleteIcon onClick={() => onDeleteClick(task)} />
+>>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
           </IconButton>
         </ListItem>
       </List>
