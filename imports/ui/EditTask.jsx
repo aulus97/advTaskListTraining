@@ -7,7 +7,6 @@ import TextField from '@mui/material/TextField';
 import { Button, Typography } from "@mui/material";
 import { Fragment } from "react";
 
-
 export const EditForm = ({_id, title, text, mode}) => {
   const [newTitle, setNewTitle] = useState(title);
   const [newText, setNewText] = useState(text);
