@@ -18,30 +18,9 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-<<<<<<< HEAD
 const pages = ['Welcome', 'Hello'];
 const settings = ['Logout'];
 
-=======
-const pages = ['Welcome', 'Hello', 'Info'];
-const settings = ['Logout'];
-
-/*function navToPage(page){
-    switch(page){
-        case "Welcome":
-            navigate("/");
-            break;
-        case "Hello":
-            navigate("/hello");
-            break;
-        case "Info":
-            navigate("/info");
-            break;
-        default:
-    }
-}*/
-
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
 export const ResponsiveTopBar = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -63,24 +42,9 @@ export const ResponsiveTopBar = () => {
         setAnchorElUser(null);
     };
 
-<<<<<<< HEAD
     const pageToLink = {
         'Welcome': "/",
         'Hello': "/hello",
-=======
-    const handleClickMenuItem = (page) => {
-        switch(page){
-            case 'Welcome':
-                return (navigate("/"));
-            case 'Hello':
-                return (navigate("/hello"));
-            case 'Info':
-                return (navigate("/info"));
-            default:
-                break;
-        }
-        //handleCloseUserMenu();
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
     };
 
     const user = useTracker(() => Meteor.user());
@@ -90,7 +54,6 @@ export const ResponsiveTopBar = () => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
     });
-
     const pendingTasksTitle = `${
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
     }`;
@@ -129,19 +92,12 @@ export const ResponsiveTopBar = () => {
                                 sx={{ display: 'block' }}
                             >
                                 {pages.map((page) => (
-<<<<<<< HEAD
                                     <MenuItem key={page} onClick={()=>{return (navigate(pageToLink[page]));}}>
-=======
-                                    <MenuItem key={page} onClick={()=>handleClickMenuItem(page)}>
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
                                         <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
-                        {/*</Box>
-                        {/*<AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />*/}
-                        {/* Logo's text //}
-                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>*/}
+                        {/* Logo's text */}
                             <Typography
                             variant="h5"
                             component="a"

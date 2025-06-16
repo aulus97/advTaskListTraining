@@ -4,11 +4,7 @@ import { Meteor } from "meteor/meteor";
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Typography } from "@mui/material";
-<<<<<<< HEAD
 import { Fragment } from "react";
-=======
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
-
 
 export const TaskForm = () => {
   const [title, setTitle] = useState("");
@@ -32,7 +28,6 @@ export const TaskForm = () => {
   };
 
   return (
-<<<<<<< HEAD
     <Fragment>
       <Box
         component="form"
@@ -65,31 +60,6 @@ export const TaskForm = () => {
         </Button>
       </Box>
     </Fragment>
-=======
-    <Box
-      component="form"
-      sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-      onSubmit={handleSubmit}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField 
-        fullWidth
-        id="outlined-basic" 
-        label="Type to add new tasks" 
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        variant="outlined" />
-      
-      <Button sx={{ my: 2, color: 'white', display: 'block' }}>
-        <Typography
-        sx={{ my: 2, color: 'white', display: 'block' }}
-        >
-          Add Task
-        </Typography>
-      </Button>
-    </Box>
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
   );
 };
 /*

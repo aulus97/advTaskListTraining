@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ResponsiveTopBar } from './TopBar';
 
 import Box from '@mui/material/Box';
@@ -11,10 +11,7 @@ export const Welcome = () => {
     const handleSignUpClick = () => {
         return (navigate("/logIn"));
     };
-<<<<<<< HEAD
     
-=======
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
     return (
         <div className='welcome'>
             <Fragment>
@@ -52,7 +49,7 @@ export const Welcome = () => {
             </Fragment>
         </div>
     );
-}
+};
 /*
 <h1>Welcome Page</h1>
     <p>Learning more about React Router 6.4 :)</p>

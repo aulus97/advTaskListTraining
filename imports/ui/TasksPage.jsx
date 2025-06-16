@@ -21,16 +21,15 @@ export const TasksPage = () => {
         }).fetch();
     });
 
-    const pendingTasksCount = useTracker(() => {
+    /*const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
     });
 
     const pendingTasksTitle = `${
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
-    }`;
+    }`;*/
 
-<<<<<<< HEAD
     const handleToggleChecked = ({ _id, isChecked }) => 
         Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
 
@@ -40,13 +39,6 @@ export const TasksPage = () => {
     const handleToggleStatus = ({ _id, status }) => 
         Meteor.callAsync("tasks.toggleStatus", { _id, status });
     
-=======
-    const handleToggleChecked = ({ _id, isChecked }) =>
-    Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
-
-    const handleDelete = ({ _id }) => Meteor.callAsync("tasks.delete", { _id });
-
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
     if (isLoading()) {
         return (
             <Button
@@ -58,6 +50,7 @@ export const TasksPage = () => {
             </Button>
         );
     }
+
     return (
         <div className="tasksPage">
             {user ? (
@@ -76,10 +69,7 @@ export const TasksPage = () => {
                             task={task}
                             onCheckboxClick={handleToggleChecked}
                             onDeleteClick={handleDelete}
-<<<<<<< HEAD
                             onStatusClick={handleToggleStatus}
-=======
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
                         />
                         ))}
                     </ul>
@@ -95,11 +85,7 @@ export const TasksPage = () => {
 <div className="app-nav-links">
                 <nav>
                     <Link to="/hello">Hello</Link> | 
-<<<<<<< HEAD
                     <Link to="/editTask">Info</Link>
-=======
-                    <Link to="/info">Info</Link>
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
                 </nav>
             <hr />
             <Outlet />
