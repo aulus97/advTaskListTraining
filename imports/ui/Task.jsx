@@ -13,7 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import { Button, Typography } from "@mui/material";
+import { Button, rgbToHex, Typography } from "@mui/material";
 
 export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) => {
   const user = useTracker(() => Meteor.user());
@@ -66,7 +66,14 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
               &emsp;{task.text}
               </>
             }
-            secondary={"by: " + task.userId + " - " + task.createdAt}
+            secondary={
+              <>
+              <br />
+              {"by: " + task.userId} 
+              <br />
+              {" - " + task.createdAt}
+              </>
+            }
             sx={{ flexGrow: 1 }}
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -81,12 +88,14 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
             >
               <Typography sx={{flexgrow:1}} >{displayStatus(task.status)}</Typography>
             </Button>
-            <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>
-              <ModeEditOutlinedIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
-              <DeleteIcon />
-            </IconButton>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>
+                <ModeEditOutlinedIcon />
+              </IconButton>
+              <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
           </Box>
         </ListItem>
       </List>

@@ -10,14 +10,12 @@ import { Button, Typography } from "@mui/material";
 
 export const EditForm = () => {
   const { taskId } = useParams();
-  console.log(taskId);
   //const isLoading = useSubscribe("tasks.singleTask", taskId);
   //console.log(isLoading);
 
   const task = useTracker(() => {
     if (!taskId) return null;
     return TasksCollection.findOne(taskId);
-    
   }, [taskId]);
   /*const task = useTracker(() => {
     if (!taskId) return null;
@@ -37,9 +35,9 @@ export const EditForm = () => {
 */
   useEffect(() => {
     if (task) {
-      if (newTitle !== (task.title || '')) setNewTitle(task.title || '');
-      if (newText !== (task.text || '')) setNewText(task.text || '');
-      if (newMode !== (task.mode || 1)) setNewMode(task.mode || 1);
+      setNewTitle(task.title || '');
+      setNewText(task.text || '');
+      setNewMode(task.mode || 1);
     }
   }, [task?.title, task?.text, task?.mode]);
 
@@ -104,14 +102,14 @@ export const EditForm = () => {
     );
   }*/
 
-  if (!task) {
+  /*if (!task) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Typography variant="h5" color="error">Task not found or you are not authorized to view it.</Typography>
         <Button onClick={handleGoBackTasksPage} sx={{ mt: 2 }} variant="contained">Go Back to Tasks</Button>
       </Box>
     );
-  }
+  }*/
 
   return (
     <Fragment>

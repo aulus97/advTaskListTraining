@@ -25,7 +25,7 @@ Meteor.methods({
     if (!this.userId) {
       throw new Meteor.Error("not-authorized", "You must be logged in to edit tasks.");
     }
-    const task = TasksCollection.findOne({
+    const task = TasksCollection.findOneAsync({
       _id: _id,
       userId: this.userId, 
     });
