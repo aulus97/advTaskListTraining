@@ -13,7 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 
 export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) => {
   const user = useTracker(() => Meteor.user());
@@ -25,7 +25,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
   
   const handleSetStatus = (state) => {
     const newState = state%3 + 1;
-    onStatusClick(newState);
+    onStatusClick(task._id, newState);
   };
   const displayStatus = (status) => {
     switch(status){
@@ -69,23 +69,25 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
             secondary={"by: " + task.userId + " - " + task.createdAt}
             sx={{ flexGrow: 1 }}
           />
-          <Button 
-          onClick={()=>{ if( user && user._id===task.userId ){ handleSetStatus(task.status); } }} 
-          sx={{ 
-          flexGrow: 1,
-          backgroundColor: statusColors[task.status], 
-          color:'rgba(0, 0, 0, 0.87)'
-          }} 
-          variant={task.status==1 ? "outlined" : "contained"}
-          >
-            {displayStatus(task.status)}
-          </Button>
-          <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>
-            <ModeEditOutlinedIcon />
-          </IconButton>
-          <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
-            <DeleteIcon />
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Button 
+            onClick={()=>{ if( user && user._id===task.userId ){ handleSetStatus(task.status); } }} 
+            sx={{ 
+            flexGrow: 1,
+            backgroundColor: statusColors[task.status], 
+            color:'rgba(0, 0, 0, 0.87)'
+            }} 
+            variant={task.status==1 ? "outlined" : "contained"}
+            >
+              <Typography sx={{flexgrow:1}} >{displayStatus(task.status)}</Typography>
+            </Button>
+            <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>
+              <ModeEditOutlinedIcon />
+            </IconButton>
+            <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
         </ListItem>
       </List>
       <Divider />

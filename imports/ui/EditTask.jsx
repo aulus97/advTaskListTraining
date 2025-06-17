@@ -10,7 +10,7 @@ import { Button, Typography } from "@mui/material";
 
 export const EditForm = () => {
   const { taskId } = useParams();
-  //console.log(taskId);
+  console.log(taskId);
   //const isLoading = useSubscribe("tasks.singleTask", taskId);
   //console.log(isLoading);
 
