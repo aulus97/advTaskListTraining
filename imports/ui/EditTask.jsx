@@ -10,30 +10,38 @@ import { Button, Typography } from "@mui/material";
 
 export const EditForm = () => {
   const { taskId } = useParams();
-  const isLoading = useSubscribe("tasks.singleTask", taskId);
+  //console.log(taskId);
+  //const isLoading = useSubscribe("tasks.singleTask", taskId);
+  //console.log(isLoading);
 
   const task = useTracker(() => {
     if (!taskId) return null;
+    return TasksCollection.findOne(taskId);
+    
+  }, [taskId]);
+  /*const task = useTracker(() => {
+    if (!taskId) return null;
     if (!isLoading) {
       return TasksCollection.findOne(taskId);
+      console.log(taskId + " - "+isLoading);
     }
     return null; // Return null while loading
-  }, [taskId, isLoading]);
+  }, [taskId, isLoading]);*/
 
   const [newTitle, setNewTitle] = useState("");
   const [newText, setNewText] = useState("");
   const [newMode, setNewMode] = useState(1); 
-  const [error, setError] = useState(null); 
+  /*const [error, setError] = useState(null); 
 
   const [initialized, setInitialized] = useState(false);
-
+*/
   useEffect(() => {
     if (task) {
       if (newTitle !== (task.title || '')) setNewTitle(task.title || '');
       if (newText !== (task.text || '')) setNewText(task.text || '');
       if (newMode !== (task.mode || 1)) setNewMode(task.mode || 1);
     }
-  }, [task?.title, task?.text, task?.mode,initialized]);
+  }, [task?.title, task?.text, task?.mode]);
 
   const navigate = useNavigate();  
   const handleGoBackTasksPage = () => {
@@ -42,10 +50,10 @@ export const EditForm = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    //setError(null); // Clear previous errors
 
     if(newTitle.trim() === "" || newText.trim() === "") {
-      setError("Title and text cannot be empty.");
+      console.log("Title and text cannot be empty.");
       return;
     }
 
@@ -54,7 +62,7 @@ export const EditForm = () => {
       handleGoBackTasksPage();
     } catch (err) {
       console.error("Failed to update task:", err);
-      setError(err.reason || "An unexpected error occurred while updating the task.");
+      //setError(err.reason || "An unexpected error occurred while updating the task.");
       //handleGoBackTasksPage();
     }
   };
@@ -80,9 +88,9 @@ export const EditForm = () => {
     '1':"Public",
     '2':"Private",
   };
-      const [loading, setLoading] = useState(true);
+      //const [loading, setLoading] = useState(true);
   
-  if (isLoading) {
+  /*if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Button 
@@ -94,7 +102,7 @@ export const EditForm = () => {
         </Button>
       </Box>
     );
-  }
+  }*/
 
   if (!task) {
     return (
@@ -113,11 +121,11 @@ export const EditForm = () => {
         onSubmit={submit}
         autoComplete="off"
       >
-        {error && ( //if error is null return nothing(error that is null, properly), otherwise return the folloiwng
+        {/*error && ( //if error is null return nothing(error that is null, properly), otherwise return the folloiwng
           <Typography color="error" sx={{ width: '100%', textAlign: 'center', mb: 2 }}>
             {error}
           </Typography>
-        )}
+        )*/}
         <TextField
           required
           fullWidth
