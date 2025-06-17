@@ -1,41 +1,75 @@
-import React, { useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Meteor } from "meteor/meteor";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useTracker, useSubscribe } from "meteor/react-meteor-data";
+import { TasksCollection } from "/imports/api/TasksCollection";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Typography } from "@mui/material";
-import { Fragment } from "react";
 
-export const EditForm = ({_id, title, text, mode}) => {
-  const [newTitle, setNewTitle] = useState(title);
-  const [newText, setNewText] = useState(text);
-  const [newMode, setNewMode] = useState(mode);
-  
+export const EditForm = () => {
+  const { taskId } = useParams();
+  const isLoading = useSubscribe("tasks.singleTask", taskId);
+
+  const task = useTracker(() => {
+    if (!taskId) return null;
+    if (!isLoading) {
+      return TasksCollection.findOne(taskId);
+    }
+    return null; // Return null while loading
+  }, [taskId, isLoading]);
+
+  const [newTitle, setNewTitle] = useState("");
+  const [newText, setNewText] = useState("");
+  const [newMode, setNewMode] = useState(1); 
+  const [error, setError] = useState(null); 
+
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (task) {
+      if (newTitle !== (task.title || '')) setNewTitle(task.title || '');
+      if (newText !== (task.text || '')) setNewText(task.text || '');
+      if (newMode !== (task.mode || 1)) setNewMode(task.mode || 1);
+    }
+  }, [task?.title, task?.text, task?.mode,initialized]);
+
+  const navigate = useNavigate();  
+  const handleGoBackTasksPage = () => {
+    (navigate("/tasks"));
+  };
+
   const submit = async (e) => {
     e.preventDefault();
-    if(newTitle=="" || newText=="") 
-      return;
-    try {
-      await Meteor.callAsync("tasks.edit", { _id, newTitle, newText, newMode });
-    } catch (error) {
-      console.error("Failed to update task:", error);
-      return (navigate("/editTask"));;
-    }
-    return (navigate("/tasks"));
-  };
+    setError(null); // Clear previous errors
 
+    if(newTitle.trim() === "" || newText.trim() === "") {
+      setError("Title and text cannot be empty.");
+      return;
+    }
+
+    try {
+      await Meteor.callAsync("tasks.edit", { _id: taskId, title: newTitle, text: newText, mode: newMode });
+      handleGoBackTasksPage();
+    } catch (err) {
+      console.error("Failed to update task:", err);
+      setError(err.reason || "An unexpected error occurred while updating the task.");
+      //handleGoBackTasksPage();
+    }
+  };
+  
   const handleTitleBlur = () => {
-    if(newTitle.trim()==="")
-      setNewTitle(title);
+    if(newTitle.trim()==="" && task)
+      setNewTitle(task.title || '');
   };
   const handleTextBlur = () => {
-    if(newText.trim()==="")
-      setNewText(text);
+    if(newText.trim()==="" && task)
+      setNewText(task.text || '');
   };
   
   const handleSetMode = () => {
-    const auxMode = newMode%2 + 1;
+    const auxMode = newMode % 2 + 1;
     setNewMode(auxMode);
   };
   const modeColors = {
@@ -46,11 +80,30 @@ export const EditForm = ({_id, title, text, mode}) => {
     '1':"Public",
     '2':"Private",
   };
+      const [loading, setLoading] = useState(true);
+  
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Button 
+        loading={loading}
+        loadingPosition="end"
+        disabled
+        >
+          Loading Task
+        </Button>
+      </Box>
+    );
+  }
 
-  const navigate = useNavigate();  
-  const handleGoBackClick = () => {
-    return (navigate("/tasks"));
-  };
+  if (!task) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Typography variant="h5" color="error">Task not found or you are not authorized to view it.</Typography>
+        <Button onClick={handleGoBackTasksPage} sx={{ mt: 2 }} variant="contained">Go Back to Tasks</Button>
+      </Box>
+    );
+  }
 
   return (
     <Fragment>
@@ -60,6 +113,11 @@ export const EditForm = ({_id, title, text, mode}) => {
         onSubmit={submit}
         autoComplete="off"
       >
+        {error && ( //if error is null return nothing(error that is null, properly), otherwise return the folloiwng
+          <Typography color="error" sx={{ width: '100%', textAlign: 'center', mb: 2 }}>
+            {error}
+          </Typography>
+        )}
         <TextField
           required
           fullWidth
@@ -89,10 +147,10 @@ export const EditForm = ({_id, title, text, mode}) => {
           {modeNames[newMode]}
         </Button>
         <Button type="submit" variant="contained" sx={{ height: '56px' }}>
-          <Typography>Confirm edition</Typography>
+          <Typography> Confirm edition </Typography>
         </Button>
-        <Button onClick={handleGoBackClick} variant="contained" sx={{ height: '56px' }}>
-          <Typography>Cancel editing</Typography>
+        <Button onClick={handleGoBackTasksPage} variant="contained" sx={{ height: '56px' }}>
+          <Typography> Cancel editing </Typography>
         </Button>
       </Box>
     </Fragment>

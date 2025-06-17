@@ -5,11 +5,7 @@ import { TasksPage } from "/imports/ui/TasksPage";
 import { Welcome } from "/imports/ui/Welcome";
 import { SignUpForm } from "/imports/ui/SignUpForm";
 import { Hello } from "/imports/ui/Hello";
-<<<<<<< HEAD
-import { Info } from "/imports/ui/editTask";
-=======
-import { Info } from "/imports/ui/Info";
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
+import { EditForm } from "/imports/ui/EditTask";
 import { LoginForm } from "/imports/ui/LoginForm";
 
 const router = createBrowserRouter([
@@ -39,12 +35,8 @@ const router = createBrowserRouter([
   },
   {
     path: 
-<<<<<<< HEAD
-    '/editTask',
-=======
-    '/info',
->>>>>>> 581bfba167004daaf61c27363e1c64a5a05324ea
-    element: <Info />,
+    '/editTask/:taskId',
+    element: <EditForm />
   },
 ]);
 

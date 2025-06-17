@@ -38,7 +38,7 @@ export const TaskForm = () => {
       >
         <TextField 
           fullWidth
-          id="outlined-basic" 
+          id="title-outlined-basic" 
           label="Name your new task" 
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -46,7 +46,7 @@ export const TaskForm = () => {
         
         <TextField 
           fullWidth
-          id="outlined-basic" 
+          id="text-outlined-basic" 
           label="Type to add new task" 
           value={text}
           onChange={(e) => setText(e.target.value)}

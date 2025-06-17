@@ -9,7 +9,7 @@ import { Navigate  } from "react-router-dom";
 
 import Button from '@mui/material/Button';
 
-export const TasksPage = () => {
+export const Hello = () => {
     const [hideCompleted, setHideCompleted] = useState(false);
     const user = useTracker(() => Meteor.user());
     const isLoading = useSubscribe("tasks");

@@ -48,7 +48,7 @@ export const LoginForm = () => {
           </Typography>
           <TextField 
           /*fullWidth*/
-          id="username" 
+          id="username-l" 
           label="Username" 
           required
           onChange={(e) => setUsername(e.target.value)}
@@ -56,7 +56,7 @@ export const LoginForm = () => {
           />
           <TextField 
           /*fullWidth*/
-          id="password" 
+          id="password-l" 
           label="Password" 
           required
           onChange={(e) => setPassword(e.target.value)}

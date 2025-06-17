@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useTracker, useSubscribe } from "meteor/react-meteor-data";
 import { useNavigate } from "react-router-dom";
-import React from "react";
-import { useTracker, useSubscribe } from "meteor/react-meteor-data";
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -19,10 +17,12 @@ import { Button } from "@mui/material";
 
 export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) => {
   const user = useTracker(() => Meteor.user());
+  
   const navigate = useNavigate();
   const handleEditClick = (task) => {
-    return (navigate("/editTask"));
+    return (navigate(`/editTask/${task._id}`));
   };
+  
   const handleSetStatus = (state) => {
     const newState = state%3 + 1;
     onStatusClick(newState);
