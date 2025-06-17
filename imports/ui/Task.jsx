@@ -23,21 +23,15 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
     return (navigate(`/editTask/${task._id}`));
   };
   
-  const handleSetStatus = (state) => {
-    const newState = state%3 + 1;
-    onStatusClick(task._id, newState);
+  const handleSetStatus = (task) => {
+    const newState = task.status%3 + 1;
+    task.status = newState;
+    onStatusClick(task);
   };
-  const displayStatus = (status) => {
-    switch(status){
-      case 1:
-        return("Cadastrada");
-      case 2:
-        return("Em andamento");
-      case 3:
-        return("Concluída");
-      default:
-        return("Cadastrada");
-    }
+  const displayStatus = {
+    '1':"Cadastrada",
+    '2':"Em andamento",
+    '3':"Concluída",
   };
   const statusColors = {
     '1':'#29b6f6',//editTask color from MUI palette for dark themes
@@ -78,15 +72,15 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Button 
-            onClick={()=>{ if( user && user._id===task.userId ){ handleSetStatus(task.status); } }} 
+              onClick={()=>{ user._id===task.userId ? handleSetStatus(task) : "" }} 
             sx={{ 
-            flexGrow: 1,
-            backgroundColor: statusColors[task.status], 
-            color:'rgba(0, 0, 0, 0.87)'
+              flexGrow: 1,
+              backgroundColor: statusColors[task.status], 
+              color:'rgba(0, 0, 0, 0.87)'
             }} 
             variant={task.status==1 ? "outlined" : "contained"}
             >
-              <Typography sx={{flexgrow:1}} >{displayStatus(task.status)}</Typography>
+              <Typography sx={{flexgrow:1}} >{displayStatus[task.status]}</Typography>
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>

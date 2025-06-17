@@ -15,9 +15,6 @@ const insertTask = (taskText, user) => TasksCollection.insertAsync({
 WebApp.connectHandlers.use(historyApiFallback({
     // verbose: true, // to uncomment for debugging
     index: '/main.html', 
-    rewrites: [
-        // Optional: Add any specific rewrites if needed, e.g., for API routes that should not be rewritten
-        // { from: /\/api\/.*/, to: function(context) { return context.parsedUrl.pathname; } },
-    ],
+    rewrites: [],
 }));
 

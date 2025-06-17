@@ -18,7 +18,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const pages = ['Welcome', 'Hello'];
+const pages = ['Welcome', 'Hello','Tasks'];
 const settings = ['Logout'];
 
 export const ResponsiveTopBar = () => {
@@ -45,6 +45,7 @@ export const ResponsiveTopBar = () => {
     const pageToLink = {
         'Welcome': "/",
         'Hello': "/hello",
+        'Tasks': "/tasks",
     };
 
     const user = useTracker(() => Meteor.user());
