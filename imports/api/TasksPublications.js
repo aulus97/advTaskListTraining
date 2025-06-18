@@ -5,9 +5,14 @@ import { check } from "meteor/check";
 Meteor.publish("tasks", function () {
   const userId = this.userId;
   if (!userId) {
-    return this.ready();
+    return TasksCollection.find({ mode: 1 });
   }
-  return TasksCollection.find({ userId });
+  return TasksCollection.find({
+    $or: [
+      { mode: 1}, 
+      { mode: 2, userId: userId }
+    ]
+  });  
 });
 Meteor.publish("tasks.singleTask", function (taskId) {
   check(taskId, String);

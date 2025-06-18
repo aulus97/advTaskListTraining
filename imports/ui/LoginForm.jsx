@@ -34,59 +34,66 @@ export const LoginForm = () => {
     <div className="login-wrapper">
       <Fragment>
         <ResponsiveTopBar />
-        <Box
-        component="form"
-        /*onSubmit={submit}*/
-        sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
-        noValidate
-        autoComplete="off"
-        >
-          <Typography
-          sx={{ my: 2, color: 'white', display: 'block' }}
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <Box
+            component="form"
+            /*onSubmit={submit}*/
+            sx={{ 
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+            noValidate
+            autoComplete="off"
           >
-            Please Log In
-          </Typography>
-          <TextField 
-          /*fullWidth*/
-          id="username-l" 
-          label="Username" 
-          required
-          onChange={(e) => setUsername(e.target.value)}
-          variant="outlined" 
-          />
-          <TextField 
-          /*fullWidth*/
-          id="password-l" 
-          label="Password" 
-          required
-          onChange={(e) => setPassword(e.target.value)}
-          variant="outlined" 
-          />
-          <Button sx={{ my: 2, color: 'white', display: 'block' }}
-          onClick={submit}
-          variant="contained">
-            <Typography
-            sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              Log In
+            <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+              Please Log In
             </Typography>
-          </Button>
-          <Divider />
-          <Typography
-            sx={{ my: 2, color: 'white', display: 'block' }}
+            <Divider />
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+                mb: 2,
+              }}
             >
-            Don't have an account?
-          </Typography>
-          <Button sx={{ my: 2, color: 'white', display: 'block' }}
-          variant="contained"
-          onClick={handleSignUpClick}
-          >
-            <Typography
-            sx={{ my: 2, color: 'white', display: 'block' }}
+              <TextField 
+                id="username-l" 
+                label="Username" 
+                required
+                onChange={(e) => setUsername(e.target.value)}
+                variant="outlined" 
+              />
+              <TextField 
+                id="password-l" 
+                label="Password" 
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                variant="outlined" 
+              />
+            </Box>
+            <Button sx={{ my: 2, color: 'white', display: 'block' }}
+              onClick={submit}
+              variant="contained"
             >
-              Sign up
+              <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                Log In
+              </Typography>
+            </Button>
+            <Divider />
+            <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+              Don't have an account?
             </Typography>
-          </Button>
+            <Button 
+              sx={{ my: 2, color: 'white', display: 'block' }}
+              variant="contained"
+              onClick={handleSignUpClick}
+            >
+              <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                Sign up
+              </Typography>
+            </Button>
+          </Box>
         </Box>
       </Fragment>
     </div>

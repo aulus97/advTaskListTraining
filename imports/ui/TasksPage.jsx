@@ -4,9 +4,10 @@ import { TasksCollection } from "/imports/api/TasksCollection";
 import { Task } from "./Task";
 import { TaskForm } from "./TaskForm";
 import { ResponsiveTopBar } from "./TopBar";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 export const TasksPage = () => {
     const user = useTracker(() => Meteor.user());
@@ -14,12 +15,30 @@ export const TasksPage = () => {
     const [hideCompleted, setHideCompleted] = useState(false);
     const hideCompletedFilter = { isChecked: { $ne: true } };
     const tasks = useTracker(() => {
-        if (!user) {return [];}
-        return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {
-            sort: { createdAt: -1 },
-        }).fetch();
+        if(user){
+            const privateTaskCondition = { 
+                mode: 2, 
+                userId: user._id,
+                ...(hideCompleted ? hideCompletedFilter : {})
+            };
+            conditions.push(privateTaskCondition); 
+        }
+        
+        const publicTaskCondition = { 
+            mode: 1,
+            ...(hideCompleted ? hideCompletedFilter : {})
+        };
+        
+        var conditions = [{...publicTaskCondition}];
+    
+        return TasksCollection.find(
+            { $or: conditions },
+            { sort: { createdAt: -1 } }
+        ).fetch();
     });
 
+    const navigate = useNavigate();
+    
     const handleToggleChecked = ({ _id, isChecked }) => 
         Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
 
@@ -29,15 +48,20 @@ export const TasksPage = () => {
     const handleToggleStatus = ({ _id, status }) => 
         Meteor.callAsync("tasks.toggleStatus", { _id, status });
     
+    const handleEdit = ({ _id }) => 
+        navigate(`/editTask/${ _id }`);
+    
     if (isLoading()) {
         return (
-            <Button
-            loading
-            loadingPosition="end"
-            variant="outlined"
-            >
-                Loading...
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Button
+                loading
+                loadingPosition="end"
+                variant="outlined"
+                >
+                    Loading...
+                </Button>
+            </Box>
         );
     }
 
@@ -60,6 +84,7 @@ export const TasksPage = () => {
                             onCheckboxClick={handleToggleChecked}
                             onDeleteClick={handleDelete}
                             onStatusClick={handleToggleStatus}
+                            onEditClick={handleEdit}
                         />
                         ))}
                     </ul>

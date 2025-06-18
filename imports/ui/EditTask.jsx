@@ -10,29 +10,17 @@ import { Button, Typography } from "@mui/material";
 
 export const EditForm = () => {
   const { taskId } = useParams();
-  //const isLoading = useSubscribe("tasks.singleTask", taskId);
-  //console.log(isLoading);
+  const isLoading = useSubscribe("tasks.singleTask", taskId);
 
   const task = useTracker(() => {
     if (!taskId) return null;
     return TasksCollection.findOne(taskId);
   }, [taskId]);
-  /*const task = useTracker(() => {
-    if (!taskId) return null;
-    if (!isLoading) {
-      return TasksCollection.findOne(taskId);
-      console.log(taskId + " - "+isLoading);
-    }
-    return null; // Return null while loading
-  }, [taskId, isLoading]);*/
-
+  
   const [newTitle, setNewTitle] = useState("");
   const [newText, setNewText] = useState("");
   const [newMode, setNewMode] = useState(1); 
-  /*const [error, setError] = useState(null); 
-
-  const [initialized, setInitialized] = useState(false);
-*/
+  
   useEffect(() => {
     if (task) {
       setNewTitle(task.title || '');
@@ -86,8 +74,20 @@ export const EditForm = () => {
     '1':"Public",
     '2':"Private",
   };
-      //const [loading, setLoading] = useState(true);
-  
+
+  if (isLoading()) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Button
+          loading
+          loadingPosition="end"
+          variant="outlined"
+          >
+              Loading Task
+          </Button>
+      </Box>
+    );
+  }
   /*if (isLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -102,14 +102,14 @@ export const EditForm = () => {
     );
   }*/
 
-  /*if (!task) {
+  if (!taskId) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Typography variant="h5" color="error">Task not found or you are not authorized to view it.</Typography>
         <Button onClick={handleGoBackTasksPage} sx={{ mt: 2 }} variant="contained">Go Back to Tasks</Button>
       </Box>
     );
-  }*/
+  }
 
   return (
     <Fragment>

@@ -49,7 +49,10 @@ export const ResponsiveTopBar = () => {
     };
 
     const user = useTracker(() => Meteor.user());
-    const logout = () => Meteor.logout();
+    const logout = async () => {
+        await Meteor.logout();
+        navigate("/");
+    }
 
     const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}

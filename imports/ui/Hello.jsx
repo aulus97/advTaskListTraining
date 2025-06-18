@@ -15,25 +15,18 @@ export const Hello = () => {
     const isLoading = useSubscribe("tasks");
     const hideCompletedFilter = { isChecked: { $ne: true } };
     const tasks = useTracker(() => {
-        if (!user) {return [];}
         return TasksCollection.find(hideCompleted ? hideCompletedFilter : {}, {
             sort: { createdAt: -1 },
         }).fetch();
     });
 
     const pendingTasksCount = useTracker(() => {
-        if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
     });
 
     const pendingTasksTitle = `${
         pendingTasksCount ? ` (${pendingTasksCount})` : ""
     }`;
-
-    const handleToggleChecked = ({ _id, isChecked }) =>
-    Meteor.callAsync("tasks.toggleChecked", { _id, isChecked });
-
-    const handleDelete = ({ _id }) => Meteor.callAsync("tasks.delete", { _id });
 
     if (isLoading()) {
         return (
@@ -46,31 +39,30 @@ export const Hello = () => {
             </Button>
         );
     }
+    
     return (
         <div className="tasksPage">
-            {user ? (
-                <Fragment>
-                    <ResponsiveTopBar />
-                    <TaskForm />
-                    <div className="filter">
-                        <Button variant="outlined" onClick={() => setHideCompleted(!hideCompleted)}>
-                        {hideCompleted ? "Show All" : "Hide Completed"}
-                        </Button>
-                    </div>
-                    <ul className="tasks">
-                        {tasks.map((task) => (
-                        <Task
-                            key={task._id}
-                            task={task}
-                            onCheckboxClick={handleToggleChecked}
-                            onDeleteClick={handleDelete}
-                        />
-                        ))}
-                    </ul>
-                </Fragment>
-            ) : (
-                <Navigate to="/logIn" />
-            )}
+            <Fragment>
+                <ResponsiveTopBar />
+                <TaskForm />
+                <div className="filter">
+                    <Button variant="outlined" onClick={() => setHideCompleted(!hideCompleted)}>
+                    {hideCompleted ? "Show All" : "Hide Completed"}
+                    </Button>
+                </div>
+                <ul className="tasks">
+                    {tasks.map((task) => (
+                    <Task
+                        key={task._id}
+                        task={task}
+                        onCheckboxClick={()=>{""}}
+                        onDeleteClick={()=>{""}}
+                        onStatusClick={()=>{""}}
+                        onEditClick={()=>{""}}
+                    />
+                    ))}
+                </ul>
+            </Fragment>
         </div>
     );
 };

@@ -15,14 +15,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 import { Button, rgbToHex, Typography } from "@mui/material";
 
-export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) => {
+export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEditClick }) => {
   const user = useTracker(() => Meteor.user());
-  
-  const navigate = useNavigate();
-  const handleEditClick = (task) => {
-    return (navigate(`/editTask/${task._id}`));
-  };
-  
+
+  const author = Meteor.users.findOne(task.userId);//for namimg the task's author when this page is invoqued by Hello
+  const authorName = author ? author.username : "unknown";
+
   const handleSetStatus = (task) => {
     const newState = task.status%3 + 1;
     task.status = newState;
@@ -63,7 +61,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
             secondary={
               <>
               <br />
-              {"by: " + task.userId} 
+              {"by: " + authorName} 
               <br />
               {" - " + task.createdAt}
               </>
@@ -83,7 +81,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick }) =>
               <Typography sx={{flexgrow:1}} >{displayStatus[task.status]}</Typography>
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <IconButton edge="end" aria-label="edit" onClick={() => handleEditClick(task)}>
+              <IconButton edge="end" aria-label="edit" onClick={() => onEditClick(task)}>
                 <ModeEditOutlinedIcon />
               </IconButton>
               <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
