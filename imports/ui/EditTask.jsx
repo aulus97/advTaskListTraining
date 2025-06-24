@@ -6,7 +6,8 @@ import { TasksCollection } from "/imports/api/TasksCollection";
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button, Typography } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 export const EditForm = () => {
   const { taskId } = useParams();
@@ -19,13 +20,13 @@ export const EditForm = () => {
   
   const [newTitle, setNewTitle] = useState("");
   const [newText, setNewText] = useState("");
-  const [newMode, setNewMode] = useState(1); 
+  const [newMode, setNewMode] = useState(3); 
   
   useEffect(() => {
     if (task) {
       setNewTitle(task.title || '');
       setNewText(task.text || '');
-      setNewMode(task.mode || 1);
+      setNewMode(task.mode || 3);
     }
   }, [task?.title, task?.text, task?.mode]);
 
@@ -62,13 +63,15 @@ export const EditForm = () => {
       setNewText(task.text || '');
   };
   
-  const handleSetMode = () => {
-    const auxMode = newMode % 2 + 1;
-    setNewMode(auxMode);
+  const handleSetMode = (event,newModeValue) => {
+    //const auxMode = newMode % 2 + 1;
+    if(newModeValue !== null)
+      setNewMode(newModeValue);
   };
   const modeColors = {
-    '1':"success",
-    '2':"error",
+    '1':'#66bb6a',//success color from MUI palette for dark themes
+    '2':'#c62828',//error color from MUI palette for dark themes
+    '3':'#29b6f6',//info color from MUI palette for dark themes
   };
   const modeNames = {
     '1':"Public",
@@ -88,19 +91,6 @@ export const EditForm = () => {
       </Box>
     );
   }
-  /*if (isLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Button 
-        loading={loading}
-        loadingPosition="end"
-        disabled
-        >
-          Loading Task
-        </Button>
-      </Box>
-    );
-  }*/
 
   if (!taskId) {
     return (
@@ -119,11 +109,6 @@ export const EditForm = () => {
         onSubmit={submit}
         autoComplete="off"
       >
-        {/*error && ( //if error is null return nothing(error that is null, properly), otherwise return the folloiwng
-          <Typography color="error" sx={{ width: '100%', textAlign: 'center', mb: 2 }}>
-            {error}
-          </Typography>
-        )*/}
         <TextField
           required
           fullWidth
@@ -144,14 +129,78 @@ export const EditForm = () => {
           onBlur={handleTextBlur}
           variant="filled" />
         
-        <Button
+        {/*<Button
         onClick={handleSetMode}
         color={modeColors[newMode]}
         sx={{ flexGrow: 1 }} 
         variant="outlined"
         >
           {modeNames[newMode]}
-        </Button>
+        </Button>*/}
+        <Divider />
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <ToggleButtonGroup
+            value={newMode}
+            exclusive
+            onChange={handleSetMode}
+            aria-label="task mode"
+          >
+            <ToggleButton 
+              value={1} 
+              sx={{
+                borderColor: (newMode === 1) ? modeColors[1] : modeColors[3],
+                color: (newMode === 1) ? modeColors[1] : 'white',
+                '&.Mui-selected': {
+                  color: modeColors[1], // force the words to have the modeColors[1] color when button is selected
+                },
+                backgroundColor: 'transparent'
+              }}
+            >
+              Public
+            </ToggleButton>
+            <ToggleButton 
+              value={2} 
+              sx={{
+                borderColor: (newMode === 2) ? modeColors[2] : modeColors[3],
+                color: (newMode === 2) ? modeColors[2] : 'white',
+                '&.Mui-selected': {
+                  color: modeColors[2], // force the words to have the modeColors[2] color when button is selected
+                },
+                backgroundColor: 'transparent'
+              }}
+            >
+              Private
+            </ToggleButton>
+          </ToggleButtonGroup>
+          {/*<Button 
+            variant="outlined"
+            sx={{
+              borderColor: (newMode === 2 && onSelectPrivateMode === true) ? modeColors[2] : modeColors[3],
+              color: (newMode === 2 && onSelectPrivateMode === true) ? modeColors[2] : 'white',
+              backgroundColor: 'transparent',
+            }} 
+            onClick={() => {setMode(2); setSelectPrivateMode(!onSelectPrivateMode)}}
+          >
+            Private
+          </Button>
+          <Button 
+            variant="outlined"
+            sx={{
+              borderColor: (newMode === 1 && onSelectPublicMode === true) ? modeColors[1] : modeColors[3],
+              color: (newMode === 1 && onSelectPublicMode === true) ? modeColors[1] : 'white',
+              backgroundColor: 'transparent',
+            }} 
+            onClick={() => {setMode(1); setSelectPublicMode(!onSelectPublicMode)}}
+          >
+            Public
+          </Button>*/}
+        </Box>
         <Button type="submit" variant="contained" sx={{ height: '56px' }}>
           <Typography> Confirm edition </Typography>
         </Button>
