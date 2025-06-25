@@ -2,10 +2,18 @@ import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./TasksCollection";
 
 Meteor.methods({
-  "tasks.insert"(doc) {
+  async "tasks.insert"(doc) {
+    if (!this.userId) {
+      throw new Meteor.Error("Not authorized");
+    }
+
+    const user = await Meteor.users.findOneAsync(this.userId);
+    const username = user?.username || "unknown";
+
     return TasksCollection.insertAsync({
       ...doc,
       userId: this.userId,
+      author: username,
     });
   },
   "tasks.toggleChecked"({ _id, isChecked }) {
