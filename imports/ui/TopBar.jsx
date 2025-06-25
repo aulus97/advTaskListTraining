@@ -19,7 +19,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const pages = ['Welcome', 'Hello','Tasks'];
-const settings = ['Logout'];
+const settings = ['Logout','Sign Up'];
 
 export const ResponsiveTopBar = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);
@@ -52,8 +52,12 @@ export const ResponsiveTopBar = () => {
     const logout = async () => {
         await Meteor.logout();
         navigate("/");
-    }
-
+    };
+    
+    const signUp = async () => {
+        await Meteor.logout();
+        navigate("/signUp");
+    };
     const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
@@ -132,28 +136,51 @@ export const ResponsiveTopBar = () => {
                                 </IconButton>
                             </Tooltip>
                             {/* menu de logout */}
-                            {user ? (<Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={logout}>
-                                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                                </MenuItem>
-                                ))}
-                            </Menu>) : ("")}
+                            {user 
+                            ? (
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <MenuItem key={settings[0]} onClick={logout}>
+                                        <Typography sx={{ textAlign: 'center' }}>{settings[0]}</Typography>
+                                    </MenuItem>
+                                </Menu>
+                            ) 
+                            : (
+                                <Menu
+                                    sx={{ mt: '45px' }}
+                                    id="menu-appbar"
+                                    anchorEl={anchorElUser}
+                                    anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                    }}
+                                    open={Boolean(anchorElUser)}
+                                    onClose={handleCloseUserMenu}
+                                >
+                                    <MenuItem key={settings[1]} onClick={signUp}>
+                                        <Typography sx={{ textAlign: 'center' }}>{settings[1]}</Typography>
+                                    </MenuItem>
+                                </Menu>
+                            )}
                         </Box>
                     </Toolbar>
                 </Container>

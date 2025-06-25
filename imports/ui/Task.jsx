@@ -17,7 +17,7 @@ import { Button, rgbToHex, Typography } from "@mui/material";
 
 export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEditClick }) => {
   const user = useTracker(() => Meteor.user());
-
+  console.log(task.author);
   const handleSetStatus = (task) => {
     const newState = task.status%3 + 1;
     task.status = newState;
@@ -44,8 +44,8 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
     '2':"Private",
   };
 
-  const author = useTracker(()=>Meteor.users.findOne(task.userId));//for namimg the task's author when this page is invoqued by Hello
-  const authorName = author ? author.username : "unknown";
+  //const author = useTracker(()=>Meteor.users.findOne(task.userId));//for namimg the task's author when this page is invoqued by Hello
+  //const authorName = author ? author.username : "unknown";
   
   return (
     <Box sx={{ width: '80%', bgcolor: 'background.paper', margin: '0 auto' }}>
@@ -71,7 +71,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
             secondary={
               <>
               <br />
-              {"by: " + authorName} 
+              {"by: " + task.author} 
               <br />
               {" - " + task.createdAt}
               </>
