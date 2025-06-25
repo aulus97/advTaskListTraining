@@ -44,7 +44,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
     '2':"Private",
   };
 
-  const author = Meteor.users.findOne(task.userId);//for namimg the task's author when this page is invoqued by Hello
+  const author = useTracker(()=>Meteor.users.findOne(task.userId));//for namimg the task's author when this page is invoqued by Hello
   const authorName = author ? author.username : "unknown";
   
   return (
@@ -79,17 +79,6 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
             sx={{ flexGrow: 1 }}
           />
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Button 
-              onClick={()=>{ user._id===task.userId ? handleSetStatus(task) : "" }} 
-            sx={{ 
-              flexGrow: 1,
-              backgroundColor: statusColors[task.status], 
-              color:'rgb(0, 0, 0)'
-            }} 
-            variant={task.status==1 ? "outlined" : "contained"}
-            >
-              <Typography sx={{flexgrow:1}} >{displayStatus[task.status]}</Typography>
-            </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <Button 
               variant="outlined"
@@ -97,12 +86,23 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
                 borderColor: task.mode ? modeColors[task.mode] : modeColors[3],
                 color: task.mode ? modeColors[task.mode] : 'white',
                 '&.Mui-selected': {
-                  color: modeColors[task.mode?task.mode:3], // force the words to have the modeColors[1] color when button is selected
+                  color: modeColors[task.mode?task.mode:3], // force the words to have the modeColors[task.mode] color when button is selected
                 },
                 backgroundColor: 'transparent'
               }}
               >
                 {modeNames[task.mode]}
+              </Button>
+              <Button 
+                onClick={()=>{ user._id===task.userId ? handleSetStatus(task) : "" }} 
+              sx={{ 
+                flexGrow: 1,
+                backgroundColor: statusColors[task.status], 
+                color:'rgb(0, 0, 0)'
+              }} 
+              variant={task.status==1 ? "outlined" : "contained"}
+              >
+                <Typography sx={{flexgrow:1}} >{displayStatus[task.status]}</Typography>
               </Button>
               <IconButton edge="end" aria-label="edit" onClick={() => onEditClick(task)}>
                 <ModeEditOutlinedIcon />

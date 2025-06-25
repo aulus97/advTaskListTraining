@@ -15,12 +15,11 @@ export const SignUpForm = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
-    function handleClick() {
-        setLoading(true);
-    }
-
+    
     const submit = (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError("");
 
         Accounts.createUser({
             username: username,
@@ -31,9 +30,9 @@ export const SignUpForm = () => {
                 return (navigate("/signUp"));
             } else {
                 setLoading(false);
+                return (navigate("/logIn"));
             }
         });
-        return (navigate("/logIn"));
     };
     return (
         <div className="login-wrapper">
@@ -65,8 +64,7 @@ export const SignUpForm = () => {
                         disabled={loading} 
                     />
                     <Button sx={{ my: 2, color: 'white', display: 'block' }}
-                    onClick={handleClick}
-                    loading={loading}
+                    type="submit"
                     loadingPosition="end"
                     disabled={loading}
                     >
