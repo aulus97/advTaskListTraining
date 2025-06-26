@@ -7,6 +7,7 @@ import { SignUpForm } from "/imports/ui/SignUpForm";
 import { Hello } from "/imports/ui/Hello";
 import { EditForm } from "/imports/ui/EditTask";
 import { LoginForm } from "/imports/ui/LoginForm";
+import { UserProfile } from "/imports/ui/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
     path: 
     '/editTask/:taskId',
     element: <EditForm />
+  },
+  {
+    path: 
+    '/userProfile/:userId',
+    element: <UserProfile />
   },
 ]);
 

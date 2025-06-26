@@ -19,7 +19,8 @@ import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const pages = ['Welcome', 'Hello','Tasks'];
-const settings = ['Logout','Sign Up'];
+const loggedInMenu = ['Profile', 'Logout'];
+const guestMenu = ['Sign Up'];
 
 export const ResponsiveTopBar = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);
@@ -30,16 +31,30 @@ export const ResponsiveTopBar = () => {
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
+    
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+    const handleUserMenuClick = (option) => {
+        switch (option) {
+            case 'Logout':
+                logout();
+                break;
+            case 'Profile':
+                goToProfile();
+                break;
+            case 'Sign Up':
+                signUp();
+                break;
+            default:
+                break;
+        }
     };
 
     const pageToLink = {
@@ -55,9 +70,14 @@ export const ResponsiveTopBar = () => {
     };
     
     const signUp = async () => {
-        await Meteor.logout();
         navigate("/signUp");
     };
+    
+    const goToProfile = async () => {
+        if(user && user._id)
+            navigate(`/userProfile/${ user._id }`);
+    };
+
     const pendingTasksCount = useTracker(() => {
         if (!user) {return 0;}
         return TasksCollection.find(hideCompletedFilter).count();
@@ -136,51 +156,30 @@ export const ResponsiveTopBar = () => {
                                 </IconButton>
                             </Tooltip>
                             {/* menu de logout */}
-                            {user 
-                            ? (
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-                                    <MenuItem key={settings[0]} onClick={logout}>
-                                        <Typography sx={{ textAlign: 'center' }}>{settings[0]}</Typography>
+                            
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {(user ? loggedInMenu : guestMenu).map((page) => (
+                                    <MenuItem key={page} onClick={() => handleUserMenuClick(page)}>
+                                        <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                     </MenuItem>
-                                </Menu>
-                            ) 
-                            : (
-                                <Menu
-                                    sx={{ mt: '45px' }}
-                                    id="menu-appbar"
-                                    anchorEl={anchorElUser}
-                                    anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                    }}
-                                    open={Boolean(anchorElUser)}
-                                    onClose={handleCloseUserMenu}
-                                >
-                                    <MenuItem key={settings[1]} onClick={signUp}>
-                                        <Typography sx={{ textAlign: 'center' }}>{settings[1]}</Typography>
-                                    </MenuItem>
-                                </Menu>
-                            )}
+                                ))}
+                            </Menu>
+                            
                         </Box>
                     </Toolbar>
                 </Container>

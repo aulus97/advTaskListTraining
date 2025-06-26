@@ -17,7 +17,7 @@ import { Button, rgbToHex, Typography } from "@mui/material";
 
 export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEditClick }) => {
   const user = useTracker(() => Meteor.user());
-  console.log(task.author);
+
   const handleSetStatus = (task) => {
     const newState = task.status%3 + 1;
     task.status = newState;

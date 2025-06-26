@@ -2,6 +2,15 @@ import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./TasksCollection";
 import { check } from "meteor/check";
 
+Meteor.publish("userProfile", function (userId) {
+  return Meteor.users.find(userId, {
+    fields: {
+      username: 1,
+      profile: 1
+    }
+  });
+});
+
 Meteor.publish("tasks", function () {
   const userId = this.userId;
   if (!userId) {

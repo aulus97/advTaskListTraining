@@ -2,6 +2,21 @@ import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./TasksCollection";
 
 Meteor.methods({
+  "accounts.updateProfile"(userProfielData) {
+    if (!this.userId) {
+      throw new Meteor.Error("Not authorized");
+    }
+
+    Meteor.users.update(this.userId, {
+      $set: {
+        "profile.fullName": userProfielData.name,
+        "profile.email": userProfielData.mail,
+        "profile.birthdate": userProfielData.date,
+        "profile.gender": userProfielData.gender,
+        "profile.company": userProfielData.company
+      }
+    });
+  },
   async "tasks.insert"(doc) {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized");

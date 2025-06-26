@@ -23,7 +23,14 @@ export const SignUpForm = () => {
 
         Accounts.createUser({
             username: username,
-            password: password
+            password: password,
+            profile: {
+                fullName: "",
+                mail: "",
+                birthdate: "",
+                gender: "",
+                company: ""
+            }
         }, (err) => {
             if (err) {
                 setError(err.reason || "Sign up failed");

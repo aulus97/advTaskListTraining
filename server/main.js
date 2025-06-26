@@ -3,8 +3,8 @@ import { WebApp } from 'meteor/webapp';
 import historyApiFallback from 'connect-history-api-fallback'; // NEW IMPORT
 
 import { TasksCollection } from "../imports/api/TasksCollection";
-import "../imports/api/TasksMethods";
-import "../imports/api/TasksPublications";
+import "../imports/api/MeteorMethods";
+import "../imports/api/MeteorPublications";
 
 const insertTask = (taskText, user) => TasksCollection.insertAsync({
     text: taskText,
