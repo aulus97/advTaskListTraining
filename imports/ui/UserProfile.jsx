@@ -31,6 +31,7 @@ const MenuProps = {
 };
 
 const genderTypes = [
+    'None',
     'Female',
     'Male',
     'Nonbinary',
@@ -42,6 +43,10 @@ const gendersMap = {
     'Female': 1,
     'Male': 2,
     'Nonbinary': 3,
+    '0' : 'None',
+    '1' : 'Female',
+    '2' : 'Male',
+    '3' : 'Nonbinary',
 };
 
 export const UserProfile = () => {
@@ -59,7 +64,7 @@ export const UserProfile = () => {
 
     const [newName, setNewName] = useState("");
     const [newMail, setNewMail] = useState("");
-    const [newDate, setNewDate] = useState("");
+    const [newDate, setNewDate] = useState(null);
     const [newGender, setNewGender] = useState("");
     const [newCompany, setNewCompany] = useState("");
 
@@ -67,8 +72,8 @@ export const UserProfile = () => {
         if (user?.profile) {
             setNewName(user.profile.name || "");
             setNewMail(user.profile.mail || "");
-            setNewDate(user.profile.date || "");
-            setNewGender(user.profile.gender || ""); //0 - not defined; 1 - Female; 2 - Male; 3 - Nonbinary
+            setNewDate(user.profile.birthdate ? dayjs(user.profile.birthdate) : null);
+            setNewGender(gendersMap[user.profile.gender] || "None"); //0 - not defined; 1 - Female; 2 - Male; 3 - Nonbinary
             setNewCompany(user.profile.company || "");
         }
     }, [user?.profile]);
@@ -79,41 +84,41 @@ export const UserProfile = () => {
         e.preventDefault();
         //setError(null); // Clear previous errors
 
-        if(newName.trim() === "" || newMail.trim() === "" || newDate.trim() === "" || newCompany.trim() === "" ) {
-            console.log("Title and text cannot be empty.");
+        /*if(newName.trim() === "" || newMail.trim() === "" || newDate.trim() === "" || newGender.trim() === "" || newCompany.trim() === "" ) {
+            console.log("Fields cannot be empty.");
             return;
-        }
+        }*/
 
         try {
             await Meteor.callAsync("accounts.updateProfile", {
                 name:newName,
                 mail:newMail,
-                date:newDate,
+                date: newDate ? newDate.format("MM-DD-YYYY") : null,
                 gender:gendersMap[newGender],
                 company:newCompany
             });
             console.log("Profile updated!");//changed from alert...
         } catch (err) {
-            console.error("Profile update failed:", err);
+            console.error("Profile update failed:");
             alert("Error: " + err.reason);
         }
     };
 
     const handleNameBlur = () => {
         if(newName.trim()==="" && user.profile)
-        setNewName(user.profile.fullName || '');
+        setNewName(user.profile.fullName || "");
     };
     const handleMailBlur = () => {
         if(newMail.trim()==="" && user.profile)
-        setNewMail(user.profile.mail || '');
+        setNewMail(user.profile.mail || "");
     };
     const handleDateBlur = () => {
         if(newDate.trim()==="" && user.profile)
-        setNewDate(user.profile.birthdate || '');
+        setNewDate(user.profile.birthdate || "");
     };
     const handleCompanyBlur = () => {
         if(newCompany.trim()==="" && user.profile)
-        setNewCompany(user.profile.company || '');
+        setNewCompany(user.profile.company || "");
     };
     
     //const theme = useTheme();
@@ -126,7 +131,7 @@ export const UserProfile = () => {
             loadingPosition="end"
             variant="outlined"
             >
-                Loading User Profile
+                Loading Profile
             </Button>
         </Box>
         );
@@ -146,59 +151,78 @@ export const UserProfile = () => {
         <ResponsiveTopBar />
         <Box
             component="form"
-            sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px', width:'70%'}}
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', gap: '16px', mt:2}}
             onSubmit={submit}
             autoComplete="off"
         >
-            <Divider />
-            <TextField
-                required
-                fullWidth
-                id="outlined-basic" 
-                label={newName} 
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                onBlur={handleNameBlur}
-                variant="filled" 
-            />
-
-            <TextField
-                required
-                fullWidth
-                id="outlined-basic" 
-                label={newMail} 
-                value={newMail}
-                onChange={(e) => setNewMail(e.target.value)}
-                onBlur={handleMailBlur}
-                variant="filled" 
-            />
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker 
-                    value={newDate ? dayjs(newDate) : null} 
-                    onChange={(newDate)=> setNewDate(newDate?.format("YYYY-MM-DD") || "")} 
-                    slotProps={ { textField: {onBlur: handleDateBlur} } }
+            <Box sx={{display:'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'baseline' , gap:'4px' }}  >
+                <Typography sx={{ my: 2, color: 'white', fontSize: 40 }}>
+                    Hello, {user.username} 
+                </Typography>
+                <Typography sx={{ my: 2, color: 'white', fontSize: 50 }}>👋🏾 </Typography>
+            </Box>
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}}  >
+                <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Name: {user.profile?.fullName == "" ? "Not informed yet" : user.profile?.fullName }
+                </Typography>
+                <TextField
+                    id="outlined-basic" 
+                    label= "Provide your name" 
+                    defaultValue={user.profile.fullName}
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    sx={{display:'flex', width:'40%'}}
+                    //onBlur={handleNameBlur}
+                    variant="filled" 
                 />
-            </LocalizationProvider>
-
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-                <Select
-                    displayEmpty
-                    value={newGender}
-                    onChange={(e)=>setNewGender(e.target.value)}
-                    input={<OutlinedInput />}
-                    renderValue={(selected) => {
-                        if (selected.length === 0) {
-                            return <em>None</em>;
-                        }
-                        return selected;
-                    }}
-                    MenuProps={MenuProps}
-                    inputProps={{ 'aria-label': 'Without label' }}
-                >
-                    <MenuItem value={newGender} >
-                        None
-                    </MenuItem>
+                <Divider />
+            </Box>
+            
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
+                <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Email: {user.profile?.mail == "" ? "Not informed yet" : user.profile?.mail }
+                </Typography>
+                <TextField
+                    id="outlined-basic" 
+                    label= "Provide your email address" 
+                    defaultValue={user.profile.mail}
+                    value={newMail}
+                    onChange={(e) => setNewMail(e.target.value)}
+                    sx={{display:'flex', width:'40%'}}
+                    //onBlur={handleMailBlur}
+                    variant="filled" 
+                />
+                <Divider />
+            </Box>
+            
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
+                <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Bithdate: {user.profile?.birthdate == null ? "Not informed yet" : user.profile?.birthdate }
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker 
+                        defaultValue={user.profile.birthdate}
+                        value={newDate} 
+                        onChange={(date)=> setNewDate(date)} 
+                        //slotProps={ { textField: {onBlur: handleDateBlur} } }
+                    />
+                </LocalizationProvider>
+                <Divider />
+            </Box>
+            
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
+                <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+                    Gender: {user.profile?.gender == "" ? "Not informed yet" : gendersMap[user.profile?.gender] }
+                </Typography>
+                <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+                    <Select
+                        displayEmpty
+                        value={newGender}
+                        onChange={(e)=>setNewGender(e.target.value)}
+                        input={<OutlinedInput />}
+                        MenuProps={MenuProps}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
                     {genderTypes.map((gender) => (
                         <MenuItem
                             key={gender}
@@ -207,35 +231,36 @@ export const UserProfile = () => {
                             {gender}
                         </MenuItem>
                     ))}
-                </Select>
-            </FormControl>
-
-            <TextField
-                required
-                fullWidth
-                id="outlined-basic" 
-                label={newCompany} 
-                value={newCompany}
-                onChange={(e) => setNewGender(e.target.value)}
-                onBlur={handleCompanyBlur}
-                variant="filled" 
-            />
-            <Divider />
-            <Box
-                sx={{
-                    display: 'flex',
-                    gap: 2,
-                    mb: 2,
-                }}
-            >
-            
+                    </Select>
+                </FormControl>
+                <Divider />
             </Box>
-            <Button type="submit" variant="contained" sx={{ height: '56px' }}>
-                <Typography> Confirm edition </Typography>
-            </Button>
-            <Button onClick={()=>history.back()} variant="contained" sx={{ height: '56px' }}>
-                <Typography> Cancel editing </Typography>
-            </Button>
+            
+            <Box sx={{display:'flex', gap:'16px', ml: 2}} >
+                <Typography sx={{ my: 2, color: 'white' }}>
+                    Company: {user.profile?.company == "" ? "Not informed yet" : user.profile?.company }
+                </Typography>
+                <TextField
+                    id="outlined-basic" 
+                    label= "Provide your company's name" 
+                    defaultValue={user.profile.company}
+                    value={newCompany}
+                    onChange={(e) => setNewCompany(e.target.value)}
+                    sx={{display:'flex', width:'40%'}}
+                    //onBlur={handleCompanyBlur}
+                    variant="filled" 
+                />
+                <Divider />
+            </Box>
+
+            <Box sx={{display: 'flex', gap: 2, mb: 2, ml: 2}}>
+                <Button type="submit" variant="contained" sx={{ height: '56px' }}>
+                    <Typography> Confirm edition </Typography>
+                </Button>
+                <Button onClick={()=>history.back()} variant="contained" sx={{ height: '56px' }}>
+                    <Typography> Cancel editing </Typography>
+                </Button>
+            </Box>
         </Box>
         </Fragment>
     );

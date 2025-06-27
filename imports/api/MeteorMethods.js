@@ -1,19 +1,26 @@
 import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./TasksCollection";
 
+const gendersMap = {
+  'None': 0,
+  'Female': 1,
+  'Male': 2,
+  'Nonbinary': 3,
+};
+
 Meteor.methods({
-  "accounts.updateProfile"(userProfielData) {
+  "accounts.updateProfile"(userProfileData) {
     if (!this.userId) {
       throw new Meteor.Error("Not authorized");
     }
 
-    Meteor.users.update(this.userId, {
+    Meteor.users.updateAsync(this.userId, {
       $set: {
-        "profile.fullName": userProfielData.name,
-        "profile.email": userProfielData.mail,
-        "profile.birthdate": userProfielData.date,
-        "profile.gender": userProfielData.gender,
-        "profile.company": userProfielData.company
+        "profile.fullName": userProfileData.name,
+        "profile.mail": userProfileData.mail,
+        "profile.birthdate": userProfileData.date,
+        "profile.gender": userProfileData.gender,
+        "profile.company": userProfileData.company
       }
     });
   },

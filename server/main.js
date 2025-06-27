@@ -6,12 +6,6 @@ import { TasksCollection } from "../imports/api/TasksCollection";
 import "../imports/api/MeteorMethods";
 import "../imports/api/MeteorPublications";
 
-const insertTask = (taskText, user) => TasksCollection.insertAsync({
-    text: taskText,
-    userId: user._id,
-    createdAt: new Date(),
-});
-
 WebApp.connectHandlers.use(historyApiFallback({
     // verbose: true, // to uncomment for debugging
     index: '/main.html', 
