@@ -29,7 +29,8 @@ export const SignUpForm = () => {
                 mail: "",
                 birthdate: "",
                 gender: "",
-                company: ""
+                company: "",
+                photo: null
             }
         }, (err) => {
             if (err) {

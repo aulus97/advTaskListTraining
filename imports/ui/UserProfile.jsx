@@ -2,11 +2,15 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Meteor } from "meteor/meteor";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTracker, useSubscribe } from "meteor/react-meteor-data";
+import axios from 'axios';
 import dayjs from 'dayjs';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Divider, Typography } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import LinearProgress from '@mui/material/LinearProgress'; // or import { LinearProgress } from '@mui/material';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { ResponsiveTopBar } from "./TopBar";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -49,6 +53,13 @@ const gendersMap = {
     '3' : 'Nonbinary',
 };
 
+const toBase64 = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+});
+
 export const UserProfile = () => {
     const { userId } = useParams();
     const isLoading = useSubscribe("userProfile", userId);
@@ -67,6 +78,7 @@ export const UserProfile = () => {
     const [newDate, setNewDate] = useState(null);
     const [newGender, setNewGender] = useState("");
     const [newCompany, setNewCompany] = useState("");
+    const [fileImage, setFileImage] = useState(null);
 
     useEffect(() => {
         if (user?.profile) {
@@ -79,23 +91,24 @@ export const UserProfile = () => {
     }, [user?.profile]);
 
     const navigate = useNavigate();  
-
+    
     const submit = async (e) => {
         e.preventDefault();
         //setError(null); // Clear previous errors
 
-        /*if(newName.trim() === "" || newMail.trim() === "" || newDate.trim() === "" || newGender.trim() === "" || newCompany.trim() === "" ) {
-            console.log("Fields cannot be empty.");
-            return;
-        }*/
+        let imageBase64 = null;
+        if (fileImage) {
+            imageBase64 = await toBase64(fileImage);
+        }
 
         try {
             await Meteor.callAsync("accounts.updateProfile", {
-                name:newName,
-                mail:newMail,
+                name: newName,
+                mail: newMail,
                 date: newDate ? newDate.format("MM-DD-YYYY") : null,
-                gender:gendersMap[newGender],
-                company:newCompany
+                gender: gendersMap[newGender],
+                company: newCompany,
+                image: imageBase64,
             });
             console.log("Profile updated!");//changed from alert...
         } catch (err) {
@@ -103,25 +116,6 @@ export const UserProfile = () => {
             alert("Error: " + err.reason);
         }
     };
-
-    const handleNameBlur = () => {
-        if(newName.trim()==="" && user.profile)
-        setNewName(user.profile.fullName || "");
-    };
-    const handleMailBlur = () => {
-        if(newMail.trim()==="" && user.profile)
-        setNewMail(user.profile.mail || "");
-    };
-    const handleDateBlur = () => {
-        if(newDate.trim()==="" && user.profile)
-        setNewDate(user.profile.birthdate || "");
-    };
-    const handleCompanyBlur = () => {
-        if(newCompany.trim()==="" && user.profile)
-        setNewCompany(user.profile.company || "");
-    };
-    
-    //const theme = useTheme();
 
     if (isLoading()) {
         return (
@@ -253,6 +247,23 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
 
+            <Box sx={{display:'flex', gap:'16px', ml: 2, my: 3}} >
+                {user.profile?.photo && (
+                    <img src={user.profile.photo} alt="Current profile photo" style={{ width: 50, height: 50, borderRadius: '50%' }} />
+                )}
+                <Divider />
+                <TextField
+                    type="file"
+                    variant="outlined"
+                    margin="normal"
+                >
+                    <input type="file" accept="image/*" onChange={(e) => setFileImage(e.target.files[0])} />
+                </TextField>
+                <Button variant="contained" color="info" component="label" startIcon={ <CloudUploadIcon /> } >
+                    Upload photo
+                </Button>
+            </Box>
+
             <Box sx={{display: 'flex', gap: 2, mb: 2, ml: 2}}>
                 <Button type="submit" variant="contained" sx={{ height: '56px' }}>
                     <Typography> Confirm edition </Typography>
@@ -265,3 +276,6 @@ export const UserProfile = () => {
         </Fragment>
     );
 };
+/*
+                <LinearProgress variant="determinate" value={uploadProgress} />
+ */

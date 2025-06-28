@@ -20,7 +20,8 @@ Meteor.methods({
         "profile.mail": userProfileData.mail,
         "profile.birthdate": userProfileData.date,
         "profile.gender": userProfileData.gender,
-        "profile.company": userProfileData.company
+        "profile.company": userProfileData.company,
+        "profile.photo" : userProfileData.image
       }
     });
   },
