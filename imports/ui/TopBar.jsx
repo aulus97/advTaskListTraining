@@ -94,10 +94,11 @@ export const ResponsiveTopBar = () => {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <AppDrawer trigger={(onOpen) => (
-                            <IconButton onClick={onOpen} color="inherit">
-                                <DoubleArrowOutlinedIcon />
-                            </IconButton>
-                        )} />
+                                <IconButton onClick={onOpen} color="inherit">
+                                    <DoubleArrowOutlinedIcon />
+                                </IconButton>
+                            )} 
+                        />
                         <Box sx={{ flexGrow: 1, display: 'block' }}>
                             <IconButton
                                 size="large"
@@ -154,7 +155,7 @@ export const ResponsiveTopBar = () => {
                             {/* User icon */}
                             <Tooltip title={user ? "Open Settings" : "Log In or Sign Up"}>
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 1, display:"flex", gap:'4px' }}>
-                                    {user.profile?.photo 
+                                    {user?.profile?.photo 
                                         ? ( 
                                             <Avatar src={user.profile.photo} /> 
                                         ) : (
