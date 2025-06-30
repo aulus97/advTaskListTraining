@@ -2,14 +2,12 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Meteor } from "meteor/meteor";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTracker, useSubscribe } from "meteor/react-meteor-data";
-import axios from 'axios';
 import dayjs from 'dayjs';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button, Divider, Typography } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import LinearProgress from '@mui/material/LinearProgress'; // or import { LinearProgress } from '@mui/material';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { ResponsiveTopBar } from "./TopBar";
@@ -22,8 +20,6 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Photo } from "@mui/icons-material";
-import CheckCircleOutlineOutlined from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 12;
@@ -268,7 +264,7 @@ export const UserProfile = () => {
                         height: uploadDone ? '100px' : '50px',
                         textTransform: 'none',
                         display: 'flex',
-                        flexDirection: 'column',  // stack content vertically
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}

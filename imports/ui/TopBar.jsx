@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { useTracker } from "meteor/react-meteor-data";
 import { TasksCollection } from "/imports/api/TasksCollection";
 import { useNavigate } from "react-router-dom";
+import { AppDrawer } from "./Drawer";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,6 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import DoubleArrowOutlinedIcon from '@mui/icons-material/DoubleArrowOutlined';
 
 const pages = ['Welcome', 'Hello','Tasks'];
 const loggedInMenu = ['Profile', 'Logout'];
@@ -91,6 +93,11 @@ export const ResponsiveTopBar = () => {
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
+                        <AppDrawer trigger={(onOpen) => (
+                            <IconButton onClick={onOpen} color="inherit">
+                                <DoubleArrowOutlinedIcon />
+                            </IconButton>
+                        )} />
                         <Box sx={{ flexGrow: 1, display: 'block' }}>
                             <IconButton
                                 size="large"
@@ -120,7 +127,7 @@ export const ResponsiveTopBar = () => {
                                 sx={{ display: 'block' }}
                             >
                                 {pages.map((page) => (
-                                    <MenuItem key={page} onClick={()=>{return (navigate(pageToLink[page]));}}>
+                                    <MenuItem key={page} onClick={ ()=>{ return ( navigate(pageToLink[page]) ); } }>
                                         <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                                     </MenuItem>
                                 ))}
@@ -151,7 +158,7 @@ export const ResponsiveTopBar = () => {
                                         ? ( 
                                             <Avatar src={user.profile.photo} /> 
                                         ) : (
-                                            <AccountCircleIcon sx={{color: 'white'}}></AccountCircleIcon> 
+                                            <AccountCircleIcon sx={{color: 'white'}} /> 
                                         ) 
                                     }
                                     <Typography 
