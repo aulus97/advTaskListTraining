@@ -107,13 +107,13 @@ export const ResponsiveTopBar = () => {
                                 id="menu-appbar"
                                 anchorEl={anchorElNav}
                                 anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
                                 }}
                                 keepMounted
                                 transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
+                                    vertical: 'top',
+                                    horizontal: 'left',
                                 }}
                                 open={Boolean(anchorElNav)}
                                 onClose={handleCloseNavMenu}
@@ -146,8 +146,14 @@ export const ResponsiveTopBar = () => {
                         <Box sx={{ flexGrow: 0 }}>
                             {/* User icon */}
                             <Tooltip title={user ? "Open Settings" : "Log In or Sign Up"}>
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <AccountCircleIcon sx={{color: 'white'}}></AccountCircleIcon>
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 1, display:"flex", gap:'4px' }}>
+                                    {user.profile?.photo 
+                                        ? ( 
+                                            <Avatar src={user.profile.photo} /> 
+                                        ) : (
+                                            <AccountCircleIcon sx={{color: 'white'}}></AccountCircleIcon> 
+                                        ) 
+                                    }
                                     <Typography 
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     >

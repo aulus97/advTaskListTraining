@@ -22,6 +22,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { Photo } from "@mui/icons-material";
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 12;
@@ -82,7 +83,7 @@ export const UserProfile = () => {
 
     useEffect(() => {
         if (user?.profile) {
-            setNewName(user.profile.name || "");
+            setNewName(user.profile.fullName || "");
             setNewMail(user.profile.mail || "");
             setNewDate(user.profile.birthdate ? dayjs(user.profile.birthdate) : null);
             setNewGender(gendersMap[user.profile.gender] || "None"); //0 - not defined; 1 - Female; 2 - Male; 3 - Nonbinary
@@ -145,17 +146,17 @@ export const UserProfile = () => {
         <ResponsiveTopBar />
         <Box
             component="form"
-            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', gap: '16px', mt:2}}
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', gap: '16px', ml:4}}
             onSubmit={submit}
             autoComplete="off"
         >
-            <Box sx={{display:'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'baseline' , gap:'4px' }}  >
+            <Box sx={{display:'flex', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'baseline' , gap:'4px', mt:3}}  >
                 <Typography sx={{ my: 2, color: 'white', fontSize: 40 }}>
                     Hello, {user.username} 
                 </Typography>
                 <Typography sx={{ my: 2, color: 'white', fontSize: 50 }}>👋🏾 </Typography>
             </Box>
-            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}}  >
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px'}}  >
                 <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
                     Name: {user.profile?.fullName == "" ? "Not informed yet" : user.profile?.fullName }
                 </Typography>
@@ -172,7 +173,7 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
             
-            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px'}} >
                 <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
                     Email: {user.profile?.mail == "" ? "Not informed yet" : user.profile?.mail }
                 </Typography>
@@ -189,13 +190,13 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
             
-            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px'}} >
                 <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
                     Bithdate: {user.profile?.birthdate == null ? "Not informed yet" : user.profile?.birthdate }
                 </Typography>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker 
-                        defaultValue={user.profile.birthdate}
+                        defaultValue={dayjs(user.profile.birthdate)}
                         value={newDate} 
                         onChange={(date)=> setNewDate(date)} 
                         //slotProps={ { textField: {onBlur: handleDateBlur} } }
@@ -204,11 +205,11 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
             
-            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', ml: 2}} >
-                <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
+            <Box sx={{display:'flex', flexWrap: 'wrap', gap:'16px', alignItems: 'center'}} >
+                <Typography sx={{ color: 'white', display: 'block' }}>
                     Gender: {user.profile?.gender == "" ? "Not informed yet" : gendersMap[user.profile?.gender] }
                 </Typography>
-                <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
+                <FormControl sx={{ m: 1, width: 300, mt: 1 }}>
                     <Select
                         displayEmpty
                         value={newGender}
@@ -230,7 +231,7 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
             
-            <Box sx={{display:'flex', gap:'16px', ml: 2}} >
+            <Box sx={{display:'flex', gap:'16px'}} >
                 <Typography sx={{ my: 2, color: 'white' }}>
                     Company: {user.profile?.company == "" ? "Not informed yet" : user.profile?.company }
                 </Typography>
@@ -247,24 +248,37 @@ export const UserProfile = () => {
                 <Divider />
             </Box>
 
-            <Box sx={{display:'flex', gap:'16px', ml: 2, my: 3}} >
-                {user.profile?.photo && (
-                    <img src={user.profile.photo} alt="Current profile photo" style={{ width: 50, height: 50, borderRadius: '50%' }} />
-                )}
+            <Box sx={{display:'flex', gap:'16px', alignItems: 'center'}} >
+                <Box sx={{display:'flex', m: 1, width:'200px',height:'200px'}}>
+                    { user.profile?.photo 
+                        ? (
+                            <img src={user.profile?.photo} alt="Current profile photo" style={{ borderRadius: '15%' }} /> 
+                        ) : (
+                            <Typography> {user.profile?.photo}  You have no profile image yet :/  </Typography> 
+                        )
+                    }
+                </Box>
                 <Divider />
-                <TextField
-                    type="file"
-                    variant="outlined"
-                    margin="normal"
-                >
-                    <input type="file" accept="image/*" onChange={(e) => setFileImage(e.target.files[0])} />
-                </TextField>
-                <Button variant="contained" color="info" component="label" startIcon={ <CloudUploadIcon /> } >
-                    Upload photo
+                <Button
+                    variant="contained"
+                    color="info"
+                    component="label"
+                    startIcon={
+                        <CloudUploadIcon sx={{ width: '40px', height: '40px' }} />
+                    }
+                    sx={{ 
+                        width: '200px',
+                        height: '50px',
+                        fontSize: '1.1rem',
+                        textTransform: 'none',
+                    }}
+                    >
+                        Upload photo
+                        <input type="file" accept="image/*" hidden onChange={(e) => setFileImage(e.target.files[0])} />
                 </Button>
             </Box>
 
-            <Box sx={{display: 'flex', gap: 2, mb: 2, ml: 2}}>
+            <Box sx={{display: 'flex', gap: 2, mb: 12}}>
                 <Button type="submit" variant="contained" sx={{ height: '56px' }}>
                     <Typography> Confirm edition </Typography>
                 </Button>
