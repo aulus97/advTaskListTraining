@@ -23,6 +23,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Photo } from "@mui/icons-material";
+import CheckCircleOutlineOutlined from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 const ITEM_HEIGHT = 38;
 const ITEM_PADDING_TOP = 12;
@@ -80,6 +81,7 @@ export const UserProfile = () => {
     const [newGender, setNewGender] = useState("");
     const [newCompany, setNewCompany] = useState("");
     const [fileImage, setFileImage] = useState(null);
+    const [uploadDone, setUploadStatus] = useState(false);
 
     useEffect(() => {
         if (user?.profile) {
@@ -91,8 +93,6 @@ export const UserProfile = () => {
         }
     }, [user?.profile]);
 
-    const navigate = useNavigate();  
-    
     const submit = async (e) => {
         e.preventDefault();
         //setError(null); // Clear previous errors
@@ -263,19 +263,33 @@ export const UserProfile = () => {
                     variant="contained"
                     color="info"
                     component="label"
-                    startIcon={
-                        <CloudUploadIcon sx={{ width: '40px', height: '40px' }} />
-                    }
                     sx={{ 
-                        width: '200px',
-                        height: '50px',
-                        fontSize: '1.1rem',
+                        width: uploadDone ? 'fit-content' : '200px',
+                        height: uploadDone ? '100px' : '50px',
                         textTransform: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',  // stack content vertically
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                     >
-                        Upload photo
-                        <input type="file" accept="image/*" hidden onChange={(e) => setFileImage(e.target.files[0])} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <CloudUploadIcon sx={{ width: '40px', height: '40px' }} />
+                            <Typography sx={{fontSize: '1.1rem', textTransform: 'none', display: 'flex',}}>
+                                Upload photo
+                            </Typography>
+                            <input type="file" accept="image/*" hidden onChange={(e) => {
+                                setFileImage(e.target.files[0]); setUploadStatus(!uploadDone);} } />
+                        </Box>
+                        {uploadDone && (
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <CheckCircleOutlineOutlinedIcon sx={{ fontSize: 20, color: 'lightgreen' }} />
+                                    <Typography sx={{ fontSize: '0.8rem' , color:'rgb(1, 255, 18)'}}>Successfully uploaded!</Typography>
+                                </Box>
+                        )}
+                        
                 </Button>
+                
             </Box>
 
             <Box sx={{display: 'flex', gap: 2, mb: 12}}>
