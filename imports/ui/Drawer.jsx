@@ -124,7 +124,3 @@ export const AppDrawer = ({trigger}) => {
         </Fragment>
     );
 }
-/* 
-<Button onClick={toggleDrawer(true)}>Open drawer</Button>
-
-*/

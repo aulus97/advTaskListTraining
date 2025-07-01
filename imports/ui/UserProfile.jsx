@@ -300,6 +300,3 @@ export const UserProfile = () => {
         </Fragment>
     );
 };
-/*
-                <LinearProgress variant="determinate" value={uploadProgress} />
- */

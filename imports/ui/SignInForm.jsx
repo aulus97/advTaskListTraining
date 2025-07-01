@@ -5,11 +5,6 @@ export const SignInForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     
-    /*const navigate = useNavigate();
-    const handleClick = () => {
-        navigate('/logIn');
-    };*/
-
     const submit = (e) => {
         e.preventDefault();
 

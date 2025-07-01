@@ -58,23 +58,3 @@ export const Hello = () => {
         </div>
     );
 };
-
-/*
-<div className="app-nav-links">
-                <nav>
-                    <Link to="/hello">Hello</Link> | 
-                    <Link to="/editTask">Info</Link>
-                </nav>
-            <hr />
-            <Outlet />
-            </div>
-
-
-<header>
-        <div className="app-bar">
-            <div className="app-header">
-                <h1>️📝️ To Do List {pendingTasksTitle}</h1>
-            </div>
-        </div>
-        </header>
-        <div className="main">            */

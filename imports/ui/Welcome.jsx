@@ -7,9 +7,6 @@ import { ResponsiveTopBar } from './TopBar';
 import Box from '@mui/material/Box';
 import { Button, Card, CardActionArea, CardContent, Typography } from "@mui/material";
 
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 
 import IconButton from '@mui/material/IconButton';
@@ -19,38 +16,39 @@ import { TasksCollection } from '../api/TasksCollection';
 export const Welcome = () => {
     const navigate = useNavigate();
     const user = useTracker(() => Meteor.user());
+    const isLoading = useSubscribe("tasks.dashboard");
 
     const cards = [
         {
             id: 1,
             title: 'Tarefas Cadastradas',
-            description: '',
         },
         {
             id: 2,
             title: 'Tarefas em Andamento',
-            description: '',
         },
         {
             id: 3,
             title: 'Tarefas Concluídas',
-            description: '',
         },
     ];
 
+    const { totalTasks, inProgressTasks, completedTasks } = useTracker(() => {
+        if (!user) return { totalTasks: 0, inProgressTasks: 0, completedTasks: 0 };
+    
+        return {
+            totalTasks: TasksCollection.find({ userId: user._id }).count(),
+            inProgressTasks: TasksCollection.find({ userId: user._id, status: 2 }).count(),
+            completedTasks: TasksCollection.find({ userId: user._id, status: 3 }).count(),
+        };
+    }, [user?._id]);
+    
     const handleCardDesc = (option) => {
         switch (option) {
-            case 1:
-                return TasksCollection.find({userId: user._id}).count();
-                //break;
-            case 2:
-                return TasksCollection.find({userId: user._id, status: 2}).count();
-                //break;
-            case 3:
-                return TasksCollection.find({userId: user._id, status: 3}).count();
-                //break;
-            default:
-                break;
+        case 1: return totalTasks;
+        case 2: return inProgressTasks;
+        case 3: return completedTasks;
+        default: return 0;
         }
     };
 
@@ -58,24 +56,43 @@ export const Welcome = () => {
         return (navigate("/logIn"));
     };
     
+    const handleSeeTasksClick = () => {
+        return (navigate("/tasks"));
+    };
+    
+    if (isLoading()) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Button
+                loading
+                loadingPosition="end"
+                variant="outlined"
+                >
+                    Loading...
+                </Button>
+            </Box>
+        );
+    }
+
     return (
         <div className='welcome'>
             <Fragment>
                 <ResponsiveTopBar />
                 { user ? (  
+                        <>
                         <Box
                             sx={{
                                 width: '80%',
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, minmax(min(200px, 100%), 1fr))',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
                                 gap: 2,
+                                alignItems:'center',
                                 justifyItems:'center',
-                                my:4,
-                                backgroundColor:'yellow',
+                                my:8,
                             }}
                         >
                             {cards.map((card, index) => (
-                                <Card>
+                                <Card key={card.id}>
                                 <CardActionArea
                                     sx={{
                                         height: '100%',
@@ -88,17 +105,31 @@ export const Welcome = () => {
                                     }}
                                 >
                                     <CardContent sx={{ height: '100%' }}>
-                                    <Typography variant="h5" component="div">
-                                        {card.title}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {handleCardDesc(card.id)}
-                                    </Typography>
+                                        <Box sx={{ alignItems:'center', justifyItems:'center'}} >
+                                            <Typography variant="h5" component="div">
+                                                {card.title}
+                                            </Typography>
+                                            <Typography variant="body1" color="info" sx={{ fontSize: '4rem' }}>
+                                                {handleCardDesc(card.id)}
+                                            </Typography>
+                                        </Box>
                                     </CardContent>
                                 </CardActionArea>
                                 </Card>
                             ))}
                         </Box>
+                        <Button 
+                        sx={{ my: 2, color: 'white', display: 'block' }}
+                        variant="contained"
+                        onClick={handleSeeTasksClick}
+                        >
+                            <Typography
+                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                See tasks
+                            </Typography>
+                        </Button>
+                        </>
                     ) : (
                         <Box sx={{ width: "70%", alignItems:'center', justifyItems:'center', my:2 }} >
                             <Typography
@@ -116,17 +147,6 @@ export const Welcome = () => {
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     >
                                         Log in
-                                    </Typography>
-                            </Button>
-                            <Button 
-                                sx={{ my: 2, color: 'white', display: 'block' }}
-                                variant="contained"
-                                onClick={handleLogInClick}
-                                >
-                                    <Typography
-                                    sx={{ my: 2, color: 'white', display: 'block' }}
-                                    >
-                                        See tasks
                                     </Typography>
                             </Button>
                         </Box>

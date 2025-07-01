@@ -43,9 +43,6 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
     '1':"Public",
     '2':"Private",
   };
-
-  //const author = useTracker(()=>Meteor.users.findOne(task.userId));//for namimg the task's author when this page is invoqued by Hello
-  //const authorName = author ? author.username : "unknown";
   
   return (
     <Box sx={{ width: '80%', bgcolor: 'background.paper', margin: '0 auto' }}>
@@ -55,7 +52,7 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
               control={
                 <Checkbox
                   checked={!!task.isChecked}
-                  onChange={() => onCheckboxClick(task)}
+                  onChange={() => { user._id===task.userId ? onCheckboxClick(task) : "" } }
                 />
               }
               label=""
@@ -104,10 +101,10 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
               >
                 <Typography sx={{flexgrow:1}} >{displayStatus[task.status]}</Typography>
               </Button>
-              <IconButton edge="end" aria-label="edit" onClick={() => onEditClick(task)}>
+              <IconButton edge="end" aria-label="edit" onClick={() => { user._id===task.userId ? onEditClick(task) : "" } }>
                 <ModeEditOutlinedIcon />
               </IconButton>
-              <IconButton edge="end" aria-label="delete" onClick={() => onDeleteClick(task)}>
+              <IconButton edge="end" aria-label="delete" onClick={() => { user._id===task.userId ? onDeleteClick(task) : "" } }>
                 <DeleteIcon />
               </IconButton>
             </Box>
@@ -118,43 +115,3 @@ export const Task = ({ task, onCheckboxClick, onDeleteClick, onStatusClick, onEd
     </Box>
   );
 };
-
-/*
-<li>
-        <input
-          type="checkbox"
-          checked={!!task.isChecked}
-          onClick={() => onCheckboxClick(task)}
-          readOnly />
-        <span>{task.text}</span>
-        <span></span>
-        <button onClick={() => onDeleteClick(task)}>&times;</button>
-      </li></>
-
----------------
-<Box sx={{ width: '70%', bgcolor: 'background.paper', margin: '0 auto' }}>
-      <nav aria-label="main mailbox folders">
-        <List>
-          <ListItem disablePadding>
-            <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={!!task.isChecked}
-                    onChange={() => onCheckboxClick(task)}
-                  />
-                }
-                label=""
-            />
-            <ListItemText
-              primary={task.text}
-              secondary={"by: " + user.username + " | at: " + user.createdAt}
-            />
-            <IconButton edge="end" aria-label="delete">
-              <DeleteIcon onClick={() => onDeleteClick(task)} />
-            </IconButton>
-          </ListItem>
-        </List>
-        <Divider />
-      </nav>
-    </Box>
-*/

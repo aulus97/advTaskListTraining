@@ -41,24 +41,28 @@ export const TaskForm = () => {
     <Fragment>
       <Box
         component="form"
-        sx={{ width:'80%', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', margin: '0 auto' }}
+        sx={{ width:'80%', display: 'flex', flexWrap: 'wrap', alignItems: 'center', 
+              gap: '16px', my: 2, mx: 'auto', 
+              backgroundColor:'rgba(83, 153, 229, 0.16)', borderRadius:'20%' }}
         onSubmit={handleSubmit}
         noValidate
         autoComplete="off"
       >
-        <TextField 
-          id="title-outlined-basic" 
-          label="Name your new task" 
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          variant="outlined" />
-        
-        <TextField 
-          id="text-outlined-basic" 
-          label="Type to add new task" 
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          variant="outlined" />
+        <Box sx={{ml:2, gap:2, display:'flex'}}>
+          <TextField 
+            id="title-outlined-basic" 
+            label="Name your new task" 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            variant="outlined" />
+          
+          <TextField 
+            id="text-outlined-basic" 
+            label="Type the text of new task" 
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            variant="outlined" />
+        </Box>
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <Typography sx={{ my: 2, color: 'white', display: 'block' }}>
               Please define the task's privacy
@@ -106,15 +110,3 @@ export const TaskForm = () => {
     </Fragment>
   );
 };
-/*
-<form className="task-form" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Type to add new tasks"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-
-      <button type="submit">Add Task</button>
-    </form>
-*/
