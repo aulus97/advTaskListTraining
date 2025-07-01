@@ -21,7 +21,7 @@ export const LoginForm = () => {
       if (err) {
         setError(err.reason || "Login failed");
       } else {
-        return (navigate("/tasks"));
+        return (navigate("/"));
       }
     });
   };

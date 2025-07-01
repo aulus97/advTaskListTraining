@@ -20,14 +20,6 @@ export const Hello = () => {
         }).fetch();
     });
 
-    const pendingTasksCount = useTracker(() => {
-        return TasksCollection.find(hideCompletedFilter).count();
-    });
-
-    const pendingTasksTitle = `${
-        pendingTasksCount ? ` (${pendingTasksCount})` : ""
-    }`;
-
     if (isLoading()) {
         return (
             <Button

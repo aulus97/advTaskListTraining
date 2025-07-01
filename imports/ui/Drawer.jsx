@@ -56,14 +56,26 @@ export const AppDrawer = ({trigger}) => {
         setOpen(newOpen);
     };
 
-    const pageToLink = {
-        'Welcome': "/",
-        'Hello': "/hello",
-        'Tasks': "/tasks",
+    const handleUserMenuClick = (option) => {
+        switch (option) {
+            case 'My profile':
+                goToProfile();
+                break;
+            case 'Tasks page':
+                navigate("/tasks");
+                break;
+            default:
+                break;
+        }
+    };
+
+    const goToProfile = async () => {
+        if(user && user._id)
+            navigate(`/userProfile/${ user._id }`);
     };
 
     const DrawerList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+        <Box sx={{ width: 250, backgroundColor: "rgba(52, 106, 173, 0.47)", color:'rgb(65, 70, 76)', height:'100%' }} role="presentation" onClick={toggleDrawer(false)}>
             {user 
                 ? (
                     <Box sx={{display:'flex', alignItems: 'center', m:1, gap:1}}>
@@ -71,7 +83,7 @@ export const AppDrawer = ({trigger}) => {
                             ? (
                                 <Avatar src={user.profile.photo} sx={{width:'60px', height:'60px'}} />
                             ) : (
-                                <AccountCircleIcon sx={{backgroundColor: "rgb(10, 10, 10)"}} />) 
+                                <AccountCircleIcon />) 
                         }
                         <Box sx={{display:'flex', textTransform: 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                             <Typography>{user.profile.fullName}</Typography>
@@ -80,7 +92,7 @@ export const AppDrawer = ({trigger}) => {
                     </Box> 
                 ) : (
                     <Box sx={{display:'flex', alignItems: 'center', m:1, gap:1}}>
-                        <AccountCircleIcon sx={{backgroundColor: "rgb(10, 10, 10)"}} />
+                        <AccountCircleIcon />
                         <Typography>Log in to display more options</Typography>
                     </Box>                        
                 )
@@ -90,7 +102,7 @@ export const AppDrawer = ({trigger}) => {
                 {['My profile', 'Tasks page'].map((page, index) => (
                     <ListItem key={page} disablePadding>
                         <ListItemButton>
-                            <ListItemIcon onClick={ ()=>{ return ( navigate(pageToLink[page]) ); } }>
+                            <ListItemIcon onClick={ () => handleUserMenuClick(page) }>
                                 {index % 2 === 0 ? <AccountCircleIcon sx={{color: 'white'}} /> : <FormatListBulletedOutlinedIcon />}
                             </ListItemIcon>
                             <ListItemText primary={page} />
